@@ -1,0 +1,22 @@
+
+   Error 
+
+  Class "PDO" not found
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:1581
+    1577▕      * @return mixed
+    1578▕      */
+    1579▕     public static function getResolver($driver)
+    1580▕     {
+  ➜ 1581▕         return static::$resolvers[$driver] ?? null;
+    1582▕     }
+    1583▕ }
+    1584▕
+
+      [2m+13 vendor frames [22m
+  14  app/Providers/AppServiceProvider.php:28
+      Illuminate\Database\Eloquent\Model::with()
+
+      [2m+7 vendor frames [22m
+  22  [internal]:0
+      Illuminate\Foundation\Application::Illuminate\Foundation\{closure}()

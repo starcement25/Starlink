@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class StaticPage extends Model
+{
+    use HasFactory;
+    protected $guarded = [] ;
+    public static $rules = [
+        "page_name"=> "required|max:255|string",
+        "value"=>"required",
+    ];
+}

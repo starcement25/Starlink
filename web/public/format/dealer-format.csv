@@ -1,0 +1,2 @@
+customer_code,name,type,linked_dealer_code,phone,whatsapp,branch_code,status
+DEMO12,DEMO NAME,"3= Dealer, 4= RSSD, 6=SD",DEMO1289,89898998,88998998,DN04,1

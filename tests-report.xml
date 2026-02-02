@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="" tests="6" assertions="6" errors="0" warnings="0" failures="0" skipped="0" time="0.667742">
+    <testsuite name="Unit" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.003996">
+      <testsuite name="Tests\Unit\ExampleTest" file="C:\xampp\htdocs\Infaith\tests\Unit\ExampleTest.php" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.003996">
+        <testcase name="test_that_true_is_true" class="Tests\Unit\ExampleTest" classname="Tests.Unit.ExampleTest" file="C:\xampp\htdocs\Infaith\tests\Unit\ExampleTest.php" line="14" assertions="1" time="0.003996"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="Feature" tests="5" assertions="5" errors="0" warnings="0" failures="0" skipped="0" time="0.663746">
+      <testsuite name="Tests\Feature\ExampleTest" file="C:\xampp\htdocs\Infaith\tests\Feature\ExampleTest.php" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.171255">
+        <testcase name="test_the_application_returns_a_successful_response" class="Tests\Feature\ExampleTest" classname="Tests.Feature.ExampleTest" file="C:\xampp\htdocs\Infaith\tests\Feature\ExampleTest.php" line="15" assertions="1" time="0.171255"/>
+      </testsuite>
+      <testsuite name="Tests\Feature\SettingTest" file="C:\xampp\htdocs\Infaith\tests\Feature\SettingTest.php" tests="2" assertions="2" errors="0" warnings="0" failures="0" skipped="0" time="0.265252">
+        <testcase name="test_can_all_setting_return" class="Tests\Feature\SettingTest" classname="Tests.Feature.SettingTest" file="C:\xampp\htdocs\Infaith\tests\Feature\SettingTest.php" line="17" assertions="1" time="0.156673"/>
+        <testcase name="test_user_can_create_setting" class="Tests\Feature\SettingTest" classname="Tests.Feature.SettingTest" file="C:\xampp\htdocs\Infaith\tests\Feature\SettingTest.php" line="26" assertions="1" time="0.108579"/>
+      </testsuite>
+      <testsuite name="Tests\Feature\UserTest" file="C:\xampp\htdocs\Infaith\tests\Feature\UserTest.php" tests="2" assertions="2" errors="0" warnings="0" failures="0" skipped="0" time="0.227239">
+        <testcase name="test_user_can_register" class="Tests\Feature\UserTest" classname="Tests.Feature.UserTest" file="C:\xampp\htdocs\Infaith\tests\Feature\UserTest.php" line="16" assertions="1" time="0.104284"/>
+        <testcase name="test_user_can_login" class="Tests\Feature\UserTest" classname="Tests.Feature.UserTest" file="C:\xampp\htdocs\Infaith\tests\Feature\UserTest.php" line="30" assertions="1" time="0.122955"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

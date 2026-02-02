@@ -1,0 +1,2 @@
+mason_name,mason_address1,mason_address2,city,district,state,country,pincode,aadhaar_no,aadhaar_doc,dob,phone_number,maritial_status,spouse_name,spouse_dob,branch_code,linked_te code,dealer_ids(single or multiple)
+demo,demo address1,demo address2,demo city,demo district,demo state,demo country,demo pincode,demo aadhaar no,image.jpg,dd-mm-yyyy,8989898989,1 for married 0 for unmarried,if maritial status 1,if martial status 1 then dd-mm-yyyy,DN04,TEJ001,"td123,NEP194"

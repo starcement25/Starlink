@@ -1,0 +1,6 @@
+App\Http\Controllers\API\V1\LiftingController->addLifting()
+App\Http\Controllers\API\V1\StarSaathiController->approveLiftingByStarSathi()
+web\App\Http\Controllers\StarSathi\DealerController->addLiftingByStarSathi()
+web\App\Http\Controllers\StarSathi\AutomateLiftingController->autoLiftingApproval()
+App\Http\Controllers\Admin\LiftingController->updateRewardStatus()
+web\App\Http\Controllers\Admin\ASMController->addLiftingByASM()

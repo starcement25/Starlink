@@ -1,0 +1,396 @@
+@import 'var.scss';
+@import 'fonts';
+@import '../css/ie7.css';
+@import "header.scss";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+// font-family: 'Roboto', sans-serif;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+// font-family: 'Montserrat', sans-serif;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+// font-family: 'Poppins', sans-serif;
+
+/****************************************************************************************
+@
+@	Global Style and Reset
+@
+****************************************************************************************/
+
+
+/* Global Styles */
+
+::selection {
+	background: #000;
+	color: #fff;
+}
+::-moz-selection {
+background: #000;
+color:#fff;
+}
+html, body {
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
+	scroll-behavior: smooth;
+}
+
+body {
+	/*font-family: 'Open Sans', sans-serif;*/
+	height: auto;
+	min-height: 100%;
+	overflow-x: hidden;
+	font-size: 1rem;
+	-webkit-font-smoothing: antialiased;
+	font-smoothing: antialiased;
+	-webkit-font-smoothing: subpixel-antialiased;
+}
+p {
+	line-height:24px;
+}
+ul{
+	list-style: none;
+	padding-left: 0;
+}
+img {
+	max-width: 100%;
+	height: auto;
+}
+a {
+	text-decoration: none;
+	transition: all 0.3s linear;
+	-webkit-transition: all 0.3s linear;
+	-moz-transition: all 0.3s linear;
+	-o-transition: all 0.3s linear;
+	color:#000;
+	cursor:pointer;
+}
+a:hover {
+	color: #000;
+	text-decoration: none;
+}
+a img {
+	border: none;
+}
+/* width */
+::-webkit-scrollbar {
+ width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+ box-shadow: inset 0 0 4px #efdb00;
+ border-radius: 5px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+ background: #4c4c4c;
+ border-radius:5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+ background: #000;
+}
+.darkHeader {
+    background-color: #f4f4f4;
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2), 0 5px 8px 0 rgba(0, 0, 0, .14), 0 1px 14px 0 rgba(0, 0, 0, .12);
+    padding-top: 20px !important;
+    padding-bottom: 17px;
+		transition: all 0.3s linear;
+	-webkit-transition: all 0.3s linear;
+	-moz-transition: all 0.3s linear;
+	-o-transition: all 0.3s linear;
+	position: fixed;
+	width: 100%;
+	animation: smoothScroll 1s forwards;
+	z-index: 9;
+}
+
+@keyframes smoothScroll {
+  0% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* 
+  ---------------------------------------------
+  preloader
+  --------------------------------------------- 
+  */
+  #preloader {
+	overflow: hidden;
+  
+	background-image: linear-gradient(127deg, #b13437 0%, #b13437 91%);
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	position: fixed;
+	z-index: 9999;
+	color: #fff;
+  }
+  
+  #preloader .jumper {
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	display: block;
+	position: absolute;
+	margin: auto;
+	width: 50px;
+	height: 50px;
+  }
+  
+  #preloader .jumper > div {
+	background-color: #fff;
+	width: 10px;
+	height: 10px;
+	border-radius: 100%;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+	position: absolute;
+	opacity: 0;
+	width: 50px;
+	height: 50px;
+	-webkit-animation: jumper 1s 0s linear infinite;
+	animation: jumper 1s 0s linear infinite;
+  }
+  
+  #preloader .jumper > div:nth-child(2) {
+	-webkit-animation-delay: 0.33333s;
+	animation-delay: 0.33333s;
+  }
+  
+  #preloader .jumper > div:nth-child(3) {
+	-webkit-animation-delay: 0.66666s;
+	animation-delay: 0.66666s;
+  }
+  
+  @-webkit-keyframes jumper {
+	0% {
+	  opacity: 0;
+	  -webkit-transform: scale(0);
+	  transform: scale(0);
+	}
+	5% {
+	  opacity: 1;
+	}
+	100% {
+	  -webkit-transform: scale(1);
+	  transform: scale(1);
+	  opacity: 0;
+	}
+  }
+  
+  @keyframes jumper {
+	0% {
+	  opacity: 0;
+	  -webkit-transform: scale(0);
+	  transform: scale(0);
+	}
+	5% {
+	  opacity: 1;
+	}
+	100% {
+	  opacity: 0;
+	}
+  }
+
+
+  @-webkit-keyframes dyinglight {
+	15% {
+	  -webkit-transform: scale(1.6);
+	  transform: scale(1.6); }
+	50% {
+	  -webkit-transform: rotate(-89deg);
+	  transform: rotate(-89deg); }
+	100% {
+	  -webkit-transform: rotate(-90deg);
+	  transform: rotate(-90deg); } }
+  @keyframes dyinglight {
+	15% {
+	  -webkit-transform: scale(1.6);
+	  transform: scale(1.6); }
+	50% {
+	  -webkit-transform: rotate(-89deg);
+	  transform: rotate(-89deg); }
+	100% {
+	  -webkit-transform: rotate(-90deg);
+	  transform: rotate(-90deg); } }
+  .dl {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	display: inline-block;
+}
+
+.dl__square {
+	display: block;
+	width: 50px;
+	height: 50px;
+	background: $site-color;
+}
+
+.dl__container {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	-webkit-transform-origin: 50% 50% 0;
+	transform-origin: 50% 50% 0;
+	-webkit-animation: dyinglight 1s ease infinite;
+	animation: dyinglight 1s ease infinite;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+
+.dl__corner--top:before,
+.dl__corner--top:after,
+.dl__corner--bottom:before,
+.dl__corner--bottom:after {
+	position: absolute;
+	width: 17px;
+	height: 17px;
+	color:$site-color;
+	content: "";
+}
+
+.dl__corner--top:before {
+	border-left: 1px solid;
+	border-top: 1px solid;
+	top: -6px;
+	left: -6px;
+}
+
+.dl__corner--top:after {
+	border-right: 1px solid;
+	border-top: 1px solid;
+	top: -6px;
+	right: -6px;
+}
+
+.dl__corner--bottom:before {
+	border-left: 1px solid;
+	border-bottom: 1px solid;
+	bottom: -6px;
+	left: -6px;
+}
+
+.dl__corner--bottom:after {
+	border-right: 1px solid;
+	border-bottom: 1px solid;
+	bottom: -6px;
+	right: -6px;
+}
+
+button:focus {
+	outline: 0px dotted !important;
+	outline: 0px auto -webkit-focus-ring-color !important;
+}
+#back2Top{
+	position: fixed;
+	bottom:2px;
+	right:2px;
+	z-index: 999; 
+} 
+
+/*----------------------*/
+.container {
+	max-width: 1170px;
+	width: 100%;
+	margin: 0 auto;
+	position: relative;
+	padding: 0;
+	padding-left: 15px;
+	padding-right: 15px;
+	font-size:16px;
+}
+/*==================================css reset==================================*/
+/****************************************************************************************
+@
+@	Styles
+@
+****************************************************************************************/
+.headerSec{
+  position: relative;
+  min-height: 50px;
+  .dropdown-submenu {
+	position: relative;
+  }
+  
+  .dropdown-submenu a::after {
+	transform: rotate(-90deg);
+	position: absolute;
+	right: 6px;
+	top: .8em;
+  }
+  
+  .dropdown-submenu .dropdown-menu {
+	top: 0;
+	left: 100%;
+	margin-left: .1rem;
+	margin-right: .1rem;
+  }
+}
+/*####################### MENU ########################*/
+
+#cssmenu > ul > li:hover > a, #cssmenu > ul > li.active > a {
+	color: red;
+	border-bottom: none !important;
+}
+#cssmenu > ul > li:hover > a::before, #cssmenu > ul > li.active > a::before {
+	opacity: 1;
+}
+#cssmenu > ul > li > a {
+	padding: 11px 20px;
+	text-transform: none;
+	font-size: 16px;
+	color: #000;
+	font-weight: 500;
+	-webkit-transition: color .2s ease;
+	-moz-transition: color .2s ease;
+	-ms-transition: color .2s ease;
+	-o-transition: color .2s ease;
+	transition: color .2s ease;
+	margin: 0 10px 0 0;
+}
+#cssmenu ul ul {
+	position: absolute;
+	left: -9999px;
+	z-index: 9999;
+	box-shadow: 1px 0 12px rgba(0,0,0,0.22);
+}
+#cssmenu ul ul li a {
+	padding: 10px 15px;
+	width: 200px;
+	font-size: 14px;
+	background: #02aef1;
+	text-decoration: none;
+	color: #fff;
+	-webkit-transition: color .2s ease;
+	-moz-transition: color .2s ease;
+	-ms-transition: color .2s ease;
+	-o-transition: color .2s ease;
+	transition: color .2s ease;
+	border-bottom: 1px solid #e64850;
+}
+#cssmenu > ul > li.has-sub > a::after {
+	display: none;
+}
+#cssmenu > ul > li.has-sub > a {
+	padding-right: 6px;
+}
+#cssmenu ul ul li:hover > a, #cssmenu ul ul li a:hover {
+	color: #222;
+}
+
+/*####################### ENd MENU ########################*/

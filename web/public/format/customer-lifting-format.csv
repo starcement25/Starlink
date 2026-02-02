@@ -1,0 +1,2 @@
+lifting_code,sap_code,product_id,month,year,quantity,status
+L00001,TD-SAP,See Product Master in Admin ,"1= January, 2= February , 3 = March, 4=April & so on",2022,25,"1= Active, 0 = Disable"
