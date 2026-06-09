@@ -1,0 +1,7 @@
+android/app/build/
+android/build/
+build/
+.cxx/
+*.aab
+*.apk
+*.so

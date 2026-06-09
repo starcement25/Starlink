@@ -1,0 +1,17 @@
+make sure inside 'node-module' -> 'react-native-snap-carousel'
+file name Carousel, Pagination, ParallaxImage, PaginationDot
+replace all "View.propTypes.style" to "ViewStyle"
+and add
+import {ViewStyle} from 'react-native'
+
+
+**@react-native-community/masked-view**
+remove jcenter() from build.gradle
+remove entire buildscript block
+
+
+
+...node_modules/react-native-modal-datetime-picker/DateTimePickerModal.android.js
+prevProps.date.getTime() === nextProps.date.getTime()
+change into
+new Date(prevProps.date).getTime() === new Date(nextProps.date).getTime()

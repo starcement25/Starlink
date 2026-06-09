@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "407967146676",
+    "firebase_url": "https://star-saathi.firebaseio.com",
+    "project_id": "star-saathi",
+    "storage_bucket": "star-saathi.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407967146676:android:381e29273ef7ebeadbede1",
+        "android_client_info": {
+          "package_name": "com.forcepower.starsfa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKyLQLK2xnrb_YtP2W5TEkxpGwawZhrsM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407967146676:android:6edd8d2489c371cbdbede1",
+        "android_client_info": {
+          "package_name": "com.starlink"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKyLQLK2xnrb_YtP2W5TEkxpGwawZhrsM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407967146676:android:6f0dab995244828fdbede1",
+        "android_client_info": {
+          "package_name": "forcepower.com.star_stellar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKyLQLK2xnrb_YtP2W5TEkxpGwawZhrsM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407967146676:android:1c5e4498eed16ec1dbede1",
+        "android_client_info": {
+          "package_name": "org.forcepower.star_saathi_dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKyLQLK2xnrb_YtP2W5TEkxpGwawZhrsM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407967146676:android:23786b9dfefefa71",
+        "android_client_info": {
+          "package_name": "org.forcepower.starcement"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKyLQLK2xnrb_YtP2W5TEkxpGwawZhrsM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
