@@ -36,7 +36,7 @@
     </div>
 @endsection
 @push('mason-create-blade')
-    <script>
+    <script nonce="{{ $cspNonce }}">
         $(document).ready(function(){
             $('#marital_status').on('change', function(){
                 if($(this).val() == 1){

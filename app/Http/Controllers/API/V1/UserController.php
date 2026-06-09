@@ -715,7 +715,7 @@ function getRedeemtionByMason(Request $request)
                 'state' => 'required',
                 'country' => 'required',
                 'pincode' => 'required|digits:6',
-                'email' => 'required|email',
+                
                
                 
             );
@@ -890,6 +890,216 @@ function getRedeemtionByMason(Request $request)
            
     }
 
+    // function applyForceRedeemtion(Request $request)
+    // {   
+       
+    //     try
+    //     {
+    //         // return "Hi";
+    //        // return response()->json(['status'=> false,'msg' => 'Try Later', 'data' => []], 200);
+    //         $targetLanguage = null;
+    //         if($request->has("preferred_app_lang") && !empty($request->preferred_app_lang))
+    //         {
+    //             $targetLanguage = $request->preferred_app_lang;
+    //         }
+    //         if(\Auth::check() && !empty(\Auth::user()->preferred_app_lang))
+    //         {
+    //             $targetLanguage = \Auth::user()->preferred_app_lang;
+    //         }
+    //         $isRedeemServiceAvailable = $this->settingVal("setting_name", "app_redeem_now_button");
+    //         if($isRedeemServiceAvailable != 1)
+    //         {
+    //             return response()->json(['status'=> false,'msg' => $this->localLanguageTranslate->translate("redemption_is_down_work_is_under_progress_sorry_for_the_inconvenience_caused", $targetLanguage), 'data' => []], 200);
+    //         }
+    //         \DB::beginTransaction();
+    //         $input = $request->all();
+    //         $rules = array(
+    //             'role' => 'required',
+    //             'catalogue_id' => 'required',
+    //             'user_id' => 'required',
+    //             'redeemed_point' => 'required',
+    //             'address1' => 'required',
+    //             'address2' => 'required',
+    //             'city' => 'required',
+    //             'district' => 'required',
+    //             'state' => 'required',
+    //             'country' => 'required',
+    //             'pincode' => 'required|digits:6',
+                
+               
+                
+    //         );
+    //         $catalogue = Catalogue::lockForUpdate()->find($request->catalogue_id);
+    //         // if(empty($catalogue) || $catalogue->status == Catalogue::STATUS_DISABLE)
+    //         // {
+    //         //     \DB::rollback();
+    //         //     return response()->json(['status'=> false,'msg' => $this->localLanguageTranslate->translate("Invalid_gift", $targetLanguage), 'data' => []], 200);
+    //         // }
+    //         // if($catalogue->catalogue_type_id == 2)
+    //         // {
+    //         //     $rules["email"] = 'required|email:rfc,dns';
+    //         // }
+
+    //         if($catalogue->catalogue_type_id == 1)
+    //         {
+    //             $rules["phone"] =  'required|digits:10';
+    //         }
+
+    //         $validationMsg = [
+    //             'role.required' => 'Redemption failed, role not found. Please contact admin.',
+    //             'catalogue_id.required' => 'Redemption failed, catalogue found. Please contact admin.',
+    //             'user_id.required' => 'Redemption failed, user found. Please contact admin.',
+    //             'redeemed_point.required' => 'Redemption failed, point found. Please contact admin.',
+    //             'email.required' => $this->localLanguageTranslate->translate('Redemption_failed,_email_is_required._Please_try_Again', $targetLanguage),
+    //             'email.email' => $this->localLanguageTranslate->translate('Redemption_failed,_valid_email_is_required._Please_try_Again', $targetLanguage),
+    //             'address1.required' => $this->localLanguageTranslate->translate('Redemption_failed,_address_1_is_required._Please_try_Again', $targetLanguage),
+    //             'address2.required' => $this->localLanguageTranslate->translate('Redemption_failed,_address_2_is_required._Please_try_Again', $targetLanguage),
+    //             'city.required' => $this->localLanguageTranslate->translate('Redemption_failed,_city_is_required._Please_try_Again', $targetLanguage),
+    //             'district.required' => $this->localLanguageTranslate->translate('Redemption_failed,_district_is_required._Please_try_Again', $targetLanguage),
+    //             'state.required' => $this->localLanguageTranslate->translate('Redemption_failed,_state_is_required._Please_try_Again', $targetLanguage),
+    //             'country.required' => $this->localLanguageTranslate->translate('Redemption_failed,_country_is_required._Please_try_Again', $targetLanguage),
+    //             'pincode.required' => $this->localLanguageTranslate->translate('Redemption_failed,_pincode_is_required._Please_try_Again', $targetLanguage),
+    //         ];
+    //         // validation 
+    //         $validator  = Validator::make($input, $rules, $validationMsg);
+    //         $res = validationFailer($validator);
+    //         if ($res['status'] == false) {
+    //             \DB::rollback();
+    //             return response()->json(['status' => false,'msg' => $res['msg']]);
+    //         }
+    //         $customErrors = [
+    //             'address1' => $this->localLanguageTranslate->translate('Redemption_failed,_address_1_is_required._Please_try_Again', $targetLanguage),
+    //             'address2' => $this->localLanguageTranslate->translate('Redemption_failed,_address_2_is_required._Please_try_Again', $targetLanguage),
+    //             'city' => $this->localLanguageTranslate->translate('Redemption_failed,_city_is_required._Please_try_Again', $targetLanguage),
+    //             'district' => $this->localLanguageTranslate->translate('Redemption_failed,_district_is_required._Please_try_Again', $targetLanguage),
+    //             'state' => $this->localLanguageTranslate->translate('Redemption_failed,_state_is_required._Please_try_Again', $targetLanguage),
+    //             'country' => $this->localLanguageTranslate->translate('Redemption_failed,_country_is_required._Please_try_Again', $targetLanguage),
+    //             'pincode' => $this->localLanguageTranslate->translate('Redemption_failed,_pincode_is_required._Please_try_Again', $targetLanguage),
+    //         ];
+    //         //becuase we have observed from app "null" input was coming 
+    //         foreach($customErrors as $error => $errorMsg)
+    //         {
+    //             if($request->$error === "null")
+    //             {
+    //                 \DB::rollback();
+    //                 return response()->json(['status' => false,'msg' => $errorMsg]);
+    //             }
+    //         }
+            
+
+    //         if($request->role == 2)
+    //         {
+    //             $masonNetPoint = User::lockForUpdate()->find($request->user_id)->points ?? null;
+    //             if($masonNetPoint == null)
+    //             {
+    //                 \DB::rollback();
+    //                 return response()->json(['status'=> false,'msg' => $this->localLanguageTranslate->translate("Mason_not_found", $targetLanguage), 'data' => []], 200);
+    //             }
+
+    //             $catalogueTDSPercentage = $this->settingVal("setting_name", "catalogue_tds_percentage");
+    //             $catalogue_tds_point = 0.00;
+    //             if($catalogueTDSPercentage && $catalogueTDSPercentage > 0)
+    //             {
+    //                 $catalogue_tds_point = round(($catalogue->point * ($catalogueTDSPercentage / 100)), 2);
+    //                 $catalogue_redeem_point = $catalogue->point + $catalogue_tds_point;
+    //                 // if($catalogue_redeem_point > $masonNetPoint)
+    //                 // {
+    //                 //     \DB::rollback();
+    //                 //     return response()->json(['status'=> false,'msg' => $this->localLanguageTranslate->translate("Insufficient_points_Your_available_balance_is_lower_than_the_catalogue_value_including_TDS_amount", $targetLanguage), 'data' => []], 200);
+    //                 // }
+    //             }
+    //             else
+    //             {
+    //                 $catalogue_redeem_point = $catalogue->point;
+    //                 //Checking Mason have enough points to redeem or not
+    //                 // if($catalogue->point > $masonNetPoint)
+    //                 // {
+    //                 //     \DB::rollback();
+    //                 //     return response()->json(['status'=> false,'msg' => $this->localLanguageTranslate->translate("You_don't_have_enough_points_to_redeem_this_gift", $targetLanguage), 'data' => []], 200);
+    //                 // }
+    //             }
+
+    //             $orderAcknowledgementWindow = $this->settingVal("setting_name", "order_acknowledgement_window");
+    //             $orderAcknowledgementApplicableDateTime = $this->settingVal("setting_name", "order_acknowledgement_applicable_date_time");
+                
+    //             // Checking Acknowledgement Provided Or Not.
+    //             if(!empty($orderAcknowledgementWindow) && $orderAcknowledgementWindow > 0 && !empty($orderAcknowledgementApplicableDateTime))
+    //             {
+    //                 $userUnacknowledgedOrders = UserCatalogueRedeemtion::where("user_id", \Auth::user()->id)
+    //                 ->where("status", UserCatalogueRedeemtion::STATUS_DELIVERED)
+    //                 //->where("is_delivery_confirmed", UserCatalogueRedeemtion::IS_DELIVERY_CONFIRMED_NO)
+    //                 ->whereNull("is_delivery_confirmed")
+    //                 ->where("created_at", ">=", $orderAcknowledgementApplicableDateTime)
+    //                 ->get();
+
+    //                 // If Not Then can't Order Further.
+    //                 foreach($userUnacknowledgedOrders as $userUnacknowledgedOrder)
+    //                 {
+    //                     return response()->json(['status'=> false,'msg' => "You cannot order as Order with Order ID ".$userUnacknowledgedOrder->order_id." is not acknowledged yet.", 'data' => []], 200);
+    //                 }
+    //             }
+
+    //             $rewards = Reward::where('user_id', $request->user_id)
+    //             ->where('is_verified', 1)
+    //             ->lockForUpdate()
+    //             ->get();
+
+    //             // find the gift name from catalog id 
+    //             // $catalogs = Catalogue::where('id',$request->catalogue_id)->first();
+    //             //dd($catalogs);
+    //             $gift_name = $catalogue->name;
+    //             // for add redeemtion points
+    //             $userCat =  new UserCatalogueRedeemtion;
+    //             $userCat->user_id = $request->user_id;
+    //             //$userCat->order_id = 'ORD'.rand(10000,99999);
+    //             $userCat->catalogue_id = $request->catalogue_id;
+    //             // $userCat->redeemed_point = $catalogue->point; 
+    //             $userCat->catalogue_tds_percentage = $catalogueTDSPercentage;
+    //             $userCat->catalogue_tds_point = $catalogue_tds_point;
+    //             $userCat->catalogue_point = $catalogue->point; 
+    //             $userCat->redeemed_point = $catalogue_redeem_point;
+    //             // $userCat->email = $catalogue->catalogue_type_id == 2 ? ($request->email) : null;
+    //             $userCat->email = $request->email ?? null;
+    //             $userCat->phone = $catalogue->catalogue_type_id == 1 ? ($request->phone) : null;
+    //             $userCat->address1 = $request->address1;
+    //             $userCat->address2 = $request->address2;
+    //             $userCat->city = $request->city;
+    //             $userCat->district = $request->district;
+    //             $userCat->state = $request->state;
+    //             $userCat->country = $request->country;
+    //             $userCat->pincode = $request->pincode;
+    //             $userCat->description = "Gift Redeemed of gift : $gift_name";
+            
+    //             $userCat->save();
+    //             // $userCat->order_id = "ORD".str_pad($userCat->id,5,0,STR_PAD_LEFT);
+    //             $userCat->order_id = $this->createRedemptionOrderID($userCat->id);
+    //             $userCat->save();
+                
+    //             // update the points of mason
+    //             $this->updatePoint($request->user_id);
+    //                 if(empty($userCat)) {
+    //                     \DB::rollback();
+    //                     return response()->json(['status'=> false,'msg' => $this->localLanguageTranslate->translate('No_data_found', $targetLanguage), 'data' => []], 200);
+    //                 }
+    //                 \DB::commit();
+    //                 return response()->json(['status'=> true,'msg' => $this->localLanguageTranslate->translate("Gift_redeemed_successfully", $targetLanguage), 'data' => $userCat], 200);
+    //         }
+    //         else
+    //         {
+    //             \DB::rollback();
+    //             return response()->json(['status'=> false,'msg' => $this->localLanguageTranslate->translate("You're_not_able_to_redeem_gift_Only_mason_can_able_to_redeem_the_gift", $targetLanguage), 'data' => []], 200);
+    //         }
+    //     }
+    //     catch(\Exception $e)
+    //     {
+    //        //\Log::info("Incoming Request".request()->post());
+    //         \Log::info("ORDER FOR USER ".\Auth::user()->id." ".$e->getMessage());
+    //         \DB::rollback();
+    //         return response()->json(['status'=> false,'msg' => $this->localLanguageTranslate->translate("You'redeemtion_service_is_not_available", $targetLanguage), 'data' => ["error_details" => $e->getMessage()]], 200);
+    //     }
+           
+    // }
+
 
 
 
@@ -897,7 +1107,39 @@ function getRedeemtionByMason(Request $request)
  {    
     //$x = $this->getLiftingCurrMonthMason(7,139,148);
         //dd($x);
-        $datas = AppBanner::where('status', 1)->get();        
+       
+
+        //$datas = AppBanner::where('status', 1)->get();    
+         $user = $request->user();
+          $user->branch->zone;
+       
+            // Step 1: Get user's zone via branch
+            if (!$user || !$user->branch || !$user->branch->zone) {
+                return response()->json([
+                    'status' => false,
+                    'msg'    => 'User zone not assigned',
+                    'data'   => []
+                ]);
+            }
+
+            $zoneId = $user->branch->zone->id;
+
+            // Step 2: Fetch banners for this zone only
+            $datas = AppBanner::where('status', 1)
+                ->whereHas('zones', function ($q) use ($zoneId) {
+                    $q->where('zones.id', $zoneId);
+                })
+                ->select('id', 'title', 'description', 'img')
+                ->get();
+
+            if ($datas->isEmpty()) {
+                return response()->json([
+                    'status' => false,
+                    'msg'    => 'No data found',
+                    'data'   => []
+                ]);
+            }  
+
     if($datas->isEmpty())
     return response()->json(['status' => false, 'msg' => 'No data found', 'data' => $datas]);  
     else
@@ -1039,7 +1281,7 @@ function getRedeemtionByMason(Request $request)
         $id   = $request->user_id;
         // $orderFeedBackWindow = $this->settingVal("setting_name", "order_feedback_window");
         $orderAcknowledgementWindow = $this->settingVal("setting_name", "order_acknowledgement_window");
-        
+        //dd($targetLanguage);
         if(!empty($targetLanguage))
         {
             $page = 1;
@@ -1056,7 +1298,7 @@ function getRedeemtionByMason(Request $request)
             $rewards = DB::table('user_catalogue_redeemtions as UCR')
             ->LeftJoin('users as U','U.id','=','UCR.user_id');
                $rewards = $rewards->where('UCR.user_id',$request->user_id); 
-            $rewards =  $rewards->select('UCR.id','UCR.order_id','UCR.redeemed_point as point', 'UCR.catalogue_point as catalogue_point',  'UCR.catalogue_tds_point as tds_point', 'UCR.remarks as remarks',
+            $rewards =  $rewards->select('UCR.id','UCR.order_id','UCR.redeemed_point as point', 'UCR.catalogue_point as catalogue_point',  'UCR.catalogue_tds_point as tds_point', 'UCR.remarks as remarks', 'UCR.order_pending_reason',
             'UCR.bag','UCR.is_verified','U.name as mason_name',
             'U.aadhaar_no as mason_aadhaar_no',
             'U.phone as mason_phone','UCR.created_at as reward_date',
@@ -1115,6 +1357,9 @@ function getRedeemtionByMason(Request $request)
                 else if($rewardVal->delivery_status == UserCatalogueRedeemtion::STATUS_PENDING)
                 {
                     $deliveryStatusValue = "Pending";
+                    if(!empty($rewardVal->order_pending_reason)){
+                        $rewards[$key]->remarks = $rewardVal->order_pending_reason;
+                    }
                 }
                 else if($rewardVal->delivery_status == UserCatalogueRedeemtion::STATUS_REJECTED)
                 {
@@ -1149,7 +1394,7 @@ function getRedeemtionByMason(Request $request)
             $rewards = DB::table('user_catalogue_redeemtions as UCR')
             ->LeftJoin('users as U','U.id','=','UCR.user_id');
                $rewards = $rewards->where('UCR.user_id',$request->user_id); 
-            $rewards =  $rewards->select('UCR.id','UCR.order_id','UCR.redeemed_point as point', 'UCR.catalogue_point as catalogue_point',  'UCR.catalogue_tds_point as tds_point', 'UCR.remarks as remarks',
+            $rewards =  $rewards->select('UCR.id','UCR.order_id','UCR.redeemed_point as point', 'UCR.catalogue_point as catalogue_point',  'UCR.catalogue_tds_point as tds_point', 'UCR.remarks as remarks', 'UCR.order_pending_reason',
             'UCR.bag','UCR.is_verified','U.name as mason_name',
             'U.aadhaar_no as mason_aadhaar_no',
             'U.phone as mason_phone','UCR.created_at as reward_date',
@@ -1184,6 +1429,13 @@ function getRedeemtionByMason(Request $request)
             ->whereNotNull('UCR.order_id')
             ->orderByDesc('UCR.id')                   
             ->get();
+
+            foreach($rewards as $key => $rewardVal)
+            {
+                if($rewardVal->delivery_status == UserCatalogueRedeemtion::STATUS_PENDING && !empty($rewardVal->order_pending_reason)){
+                    $rewards[$key]->remarks = $rewardVal->order_pending_reason;
+                }
+            }
         }
             
             if($rewards->isEmpty()) {
@@ -1344,4 +1596,3 @@ public function lastOrderContactDetais(Request $request) {
 
 
 }
-

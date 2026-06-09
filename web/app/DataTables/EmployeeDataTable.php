@@ -31,7 +31,7 @@ class EmployeeDataTable extends DataTable
                 return '<span class="badge '.$class.'">'.$text.'</span>';
             })
             ->editColumn('employee_branch.name', function (User $user) {
-                $data = $user->employee_branch->pluck('name')->toArray() ?? "" ;
+                $data = $user->employee_branch?->pluck('name')?->toArray() ?? "" ;
                 if($data != "")
                 {
                     return  implode(",",$data);
@@ -40,20 +40,26 @@ class EmployeeDataTable extends DataTable
                
               
             })
+            ->editColumn('employee_branch.zone', function (User $user) {
+                //     $datas = $user->employee_branch?->all() ;
+                //     $temp= [] ;
+                //     foreach($datas as $data){
+                //        $temp[] = $data['zone']['name'];
+                //     }
+                //  return  implode(",",$temp);
+
+                return $user->employee_branch
+                            ?->pluck('zone.name')
+                            ->filter()
+                            ->implode(',');
+                  
+              })
             ->editColumn('states.state_name', function (User $user) {
                 $data = $user->states->state_name ?? "" ;
                return $data   ;
               
-            })
-            ->editColumn('employee_branch.zone', function (User $user) {
-                 $datas = $user->employee_branch->all() ;
-                 $temp= [] ;
-                 foreach($datas as $data){
-                    $temp[] = $data['zone']['name'];
-                 }
-              return  implode(",",$temp);
-               
-            })
+               })
+           
             ->editColumn('action', function(User $user){
                 return '<form method="POST" action="'.route('employees.destroy', ['employee'=> $user->id]).'">
                 '.csrf_field().'
@@ -95,6 +101,7 @@ class EmployeeDataTable extends DataTable
         }
         else
         {
+          
             return $model->newQuery()->with('states')->with(['employee_branch', 'employee_branch.zone'])->where('role', 1)->orderBy('id', 'DESC')->select(["users.*"]);
         }
     }

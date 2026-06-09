@@ -34,6 +34,9 @@ class BranchDataTable extends DataTable
                     ->editColumn('state.state_name', function ($branch) {
                         return $branch->state->state_name ?? "";
                     })
+                    ->editColumn('zone.name', function ($branch) {
+                        return $branch->zone->name ?? "";
+                    })
                     ->addColumn('action', function ($branch) {
                         return '<form method="POST" action="'.route('branch.destroy', ['branch'=> $branch->id]).'">
                                    '.csrf_field().'

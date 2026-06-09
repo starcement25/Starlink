@@ -1300,7 +1300,23 @@ class LiftingController extends Controller
 
                 // ------------------------ Verified By At History -----------------------------------
                 $verified_by_at = $lifting->reward[0]->verified_by_at_history ?? false ;
-                $verifiedByAtHistory = $verified_by_at ? implode(", ", json_decode($verified_by_at)) : ($lifting->reward[0]->verified_by_at ?? "");
+                // $verifiedByAtHistory = $verified_by_at ? implode(", ", json_decode($verified_by_at)) : ($lifting->reward[0]->verified_by_at ?? "");
+
+                if ($verified_by_at) {
+                    $dates = json_decode($verified_by_at, true);
+                    $formattedDates = [];
+
+                    if (is_array($dates)) {
+                        foreach ($dates as $val) {
+                            $formattedDates[] = $this->formatDateFlexible($val);
+                        }
+                    }
+
+                    $verified_by_at_history = implode(", ", $formattedDates);
+                } else {
+                    $singleDate = $lifting->reward[0]->verified_by_at ?? "";
+                    $verified_by_at_history = $this->formatDateFlexible($singleDate);
+                }
 
                 $content = [
                     "LF".str_pad($lifting->id,10,"0",STR_PAD_LEFT ),
@@ -1334,7 +1350,7 @@ class LiftingController extends Controller
                    // $lifting->reward[0]->user->name ?? "",
                    $verifiedBy,
                   // $lifting->reward[0]->verified_by_at ?? "",
-                  $verifiedByAtHistory,
+                  $verified_by_at_history,
                 ];
                 fputcsv($myfile,$content);
                 $dataProcessedCount++;
@@ -1349,6 +1365,35 @@ class LiftingController extends Controller
         fclose($myfile);
         $filePath = public_path("/excel_exports/verify_liftings/".$filename);
         return response()->download($filePath)->deleteFileAfterSend(true);
+    }
+
+    public function formatDateFlexible($date)
+    {
+        if (empty($date)) {
+            return "";
+        }
+
+        $date = trim($date);
+
+        try {
+            // Handle 2-digit year manually
+            $parts = explode(' ', $date);
+
+            if (count($parts) == 2) {
+                [$d, $t] = $parts;
+                [$y, $m, $day] = explode('-', $d);
+
+                if (strlen($y) == 2) {
+                    $y = '20' . $y; // convert 24 → 2024
+                    $date = $y . '-' . $m . '-' . $day . ' ' . $t;
+                }
+            }
+
+            return Carbon::parse($date)->format('d-m-Y H:i');
+
+        } catch (\Exception $e) {
+            return $date;
+        }
     }
 
     // public function downloadExcel(Request $request)

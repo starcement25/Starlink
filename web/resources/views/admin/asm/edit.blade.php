@@ -39,7 +39,7 @@
 @endsection
 
 @push('user-edit-blade')
-    <script>
+    <script nonce="{{ $cspNonce }}">
         $(document).ready(function(){
             $("#branches").select2();
         });

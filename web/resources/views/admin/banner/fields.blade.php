@@ -24,6 +24,34 @@
         <span class="text text-danger">{{ $message }}</span>
     @enderror
 </div>
+<!--Zone Field -->
+<!-- <div class="form-group col-sm-6">
+    {!! Form::label('zone_id', 'Zone:') !!}
+    {!! Form::select('zone_id', $zoneOption, $zoneOptionSelected, ['class' => ($errors->has('zone_id')) ? 'form-control border-danger' : 'form-control']) !!}
+    @error('zone_id')
+        <span class="text text-danger">{{ $message }}</span>
+    @enderror
+</div> -->
+<!-- Zone Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('zone_id', 'Zones:') !!}
+
+    {!! Form::select(
+        'zone_id[]',
+        $zoneOption,
+        $zoneOptionSelected ?? [],
+        [
+            'class' => ($errors->has('zone_id')) 
+                ? 'form-control border-danger' 
+                : 'form-control',
+            'multiple' => true
+        ]
+    ) !!}
+
+    @error('zone_id')
+        <span class="text text-danger">{{ $message }}</span>
+    @enderror
+</div>
 <!--Status Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('status', 'Status:') !!}

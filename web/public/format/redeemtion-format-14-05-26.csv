@@ -1,0 +1,2 @@
+order_id,"status (1=Delivered, 2 = rejected, 3 = Order Placed, 4= Undelivered)",remarks,order_tracking_url,tracking_ord_id,delivery_date (d-m-Y)
+TEST001,2,Test Rejection,,,

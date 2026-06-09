@@ -103,7 +103,7 @@
 
 @endsection
 @push('employee-bulk-upload-blade')
-    <script>
+    <script nonce="{{ $cspNonce }}">
         var timer ;
         $(document).ready(function(){
           //  getProgress();

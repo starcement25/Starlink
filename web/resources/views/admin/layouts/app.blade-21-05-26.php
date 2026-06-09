@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title> Star Link </title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+
+      <!-- CSRF Token -->
+   <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+          integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" nonce="{{ $cspNonce }}" />
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap4-toggle/3.6.1/bootstrap4-toggle.min.css"
+          integrity="sha512-EzrsULyNzUc4xnMaqTrB4EpGvudqpetxG/WNjCpG6ZyyAGxeB6OBF9o246+mwx3l/9Cn838iLIcrxpPHTiygAA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" nonce="{{ $cspNonce }}" />
+
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/css/adminlte.min.css"
+          integrity="sha512-mxrUXSjrxl8vm5GwafxcqTrEwO1/oBNU25l20GODsysHReZo4uhVISzAKzaABH6/tTfAxZrY2FprmeAP5UZY8A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" nonce="{{ $cspNonce }}" />
+
+    <!-- iCheck -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css"
+          integrity="sha512-8vq2g5nHE062j3xor4XxPeZiPjmRDh6wlufQlfC6pdQ/9urJkU07NM0tEREeymP++NczacJ/Q59ul+/K2eYvcg=="
+          crossorigin="anonymous" nonce="{{ $cspNonce }}"/>
+
+    <!-- Select2 -->
+    <link rel="stylesheet" href=" {{ asset('resources/admin/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('resources/admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"
+          integrity="sha512-aEe/ZxePawj0+G2R+AaIxgrQuKT68I28qh+wgLrcAJOz3rxCP+TwrK5SPN+E5I+1IQjNtcfvb96HDagwrKRdBw=="
+          crossorigin="anonymous" nonce="{{ $cspNonce }}"/>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css" nonce="{{ $cspNonce }}"/>
+    <link rel="stylesheet" href="{{ asset('resources/admin/css/summernote-bs4.min.css') }}"/>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+    integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+    crossorigin="anonymous" nonce="{{ $cspNonce }}"></script>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" nonce="{{ $cspNonce }}">
+    <!-- Bootstrap-Select CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css" rel="stylesheet" nonce="{{ $cspNonce }}">
+        
+    @stack('third_party_stylesheets')
+
+    @stack('page_css')
+    <style nonce="{{ $cspNonce }}">
+        sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
+            background-color: #ee1d23;
+            color: #fff;
+        }
+
+        [class*=sidebar-dark-] {
+            background-color: #ee1d23;
+        }
+
+        .nav-link.active {
+    background-color: #f06569 !important;
+    color: #fff;
+}
+    </style>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+    <!-- Main Header -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown user-menu">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                    <!-- {{-- <img src="https://assets.infyom.com/logo/blue_logo_150x150.png" --}} -->
+                    <img src= "{{ Auth::user()->profile_pic ?? asset('logo/default-user.jpg') }}"
+                         class="user-image img-circle elevation-2" alt="User Image">
+                    <span class="d-none d-md-inline">{{ Auth::user()->name ?? ""}}</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                    <!-- User image -->
+                    <li class="user-header bg-primary" >
+                        <!-- {{-- <img src="https://assets.infyom.com/logo/blue_logo_150x150.png" --}} -->
+                        <img src="{{ Auth::user()->profile_pic ?? asset('logo/default-user.jpg') }}"
+                             class="img-circle elevation-2"
+                             alt="User Image">
+                        <p >
+                            {{ Auth::user()->name ?? "" }}
+                            
+                        </p>
+                    </li>
+                    <!-- Menu Footer-->
+                    <li class="user-footer">
+                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                        <a href="#" class="btn btn-default btn-flat float-right"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Sign out
+                        </a>
+                        <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Left side column. contains the logo and sidebar -->
+@include('admin.layouts.sidebar')
+
+<!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <section class="content">
+            @yield('content')
+        </section>
+    </div>
+
+    <!-- Main Footer -->
+    {{-- <footer class="main-footer">
+        <div class="float-right d-none d-sm-block">
+            <b>Version</b> 3.1.0
+        </div>
+        <strong>
+           Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.
+        </strong>
+        All rights reserved.
+    </footer> --}}
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous" nonce="{{ $cspNonce }}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
+        integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
+        crossorigin="anonymous" nonce="{{ $cspNonce }}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js" nonce="{{ $cspNonce }}"></script>
+
+<!-- AdminLTE App -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/js/adminlte.min.js"
+        integrity="sha512-AJUWwfMxFuQLv1iPZOTZX0N/jTCIrLxyZjTRKQostNU71MzZTEPHjajSK20Kj1TwJELpP7gl+ShXw5brpnKwEg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" nonce="{{ $cspNonce }}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+        integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" nonce="{{ $cspNonce }}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"
+        integrity="sha512-GDey37RZAxFkpFeJorEUwNoIbkTwsyC736KNSYucu1WJWFK9qTdzYub8ATxktr6Dwke7nbFaioypzbDOQykoRg=="
+        crossorigin="anonymous" nonce="{{ $cspNonce }}"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js" nonce="{{ $cspNonce }}"></script>
+
+<!-- Select2 -->
+<script src="{{ asset('resources/admin/plugins/select2/js/select2.full.min.js')}} "></script>
+        
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/1.3/bootstrapSwitch.min.js"
+        integrity="sha512-DAc/LqVY2liDbikmJwUS1MSE3pIH0DFprKHZKPcJC7e3TtAOzT55gEMTleegwyuIWgCfOPOM8eLbbvFaG9F/cA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" nonce="{{ $cspNonce }}"></script>
+        <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" nonce="{{ $cspNonce }}"></script>
+  <!-- Bootstrap-Select JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js" nonce="{{ $cspNonce }}"></script>
+
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js" nonce="{{ $cspNonce }}"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js" nonce="{{ $cspNonce }}"></script>
+<script src="{{ asset('resources/admin/js/summernote-bs4.min.js') }}"></script>
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js" nonce="{{ $cspNonce }}"></script>
+
+<script nonce="{{ $cspNonce }}">
+    $(function () {
+        bsCustomFileInput.init();
+    });
+
+    $("input[data-bootstrap-switch]").each(function () {
+        $(this).bootstrapSwitch('state', $(this).prop('checked'));
+    });
+</script>
+
+@stack('third_party_scripts')
+@stack('page_scripts')
+@stack('user-create-blade')
+@stack('user-edit-blade')
+@stack('page-blade')
+@stack('verify-lifting-blade')
+@stack('mason-create-blade')
+@stack('employee-bulk-upload-blade')
+@stack('mason-bulk-upload-blade')
+@stack('dealer-bulk-upload-blade')
+@stack('dealer-sap-upload-blade')
+@stack('lifting-bulk-upload-blade')
+@stack('catalogue-bulk-upload-blade')
+@stack('branch-bulk-upload-blade')
+@stack('catalogue-image-upload-blade')
+@stack('mason-point-blade')
+@stack('mason-aadhaar-upload-blade')
+@stack('js')
+</body>
+</html>

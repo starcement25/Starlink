@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Zone;
 use App\Models\Banner;
 use Laracasts\Flash\Flash;
 use App\Traits\HelperTrait;
 use Illuminate\Http\Request;
 use App\DataTables\BannerDataTable;
 use App\Http\Controllers\Controller;
+
 
 class BannerController extends Controller
 {
@@ -20,6 +22,7 @@ class BannerController extends Controller
     public function index(BannerDataTable $dataTable, Request $request)
     {
         \Helper::checkIsUserAuthorizeToPerformTheTask('banners.view') ;
+       // dd($dataTable);
         return $dataTable->render('admin.banner.index');
     }
 
@@ -31,7 +34,8 @@ class BannerController extends Controller
     public function create()
     {
         \Helper::checkIsUserAuthorizeToPerformTheTask('banners.create') ;
-        return view('admin.banner.create') ;
+        $zones = Zone::where('status', '1')->orderBy('name', 'DESC')->pluck('name', 'id')->toArray();
+        return view('admin.banner.create')->with('zoneOption', $zones)->with('zoneOptionSelected', "") ;
         
     }
 
@@ -48,14 +52,22 @@ class BannerController extends Controller
             $request->validate([
                 'title'=> 'required|max:250',
                 'description'=> 'required|max:500',
+                'zone_id'     => 'required|array',
+                'zone_id.*'   => 'exists:zones,id',
             ]);
 
+        //dd($request);
 
-            $input = $request->except(['image']) ;
+            $input = $request->except(['image', 'zone_id']) ;
             $banner = Banner::create($input) ;
+           
             if($request->has('image')){
                 $data = $this->uploadFile($request->file('image'), 'banners') ;
                 $banner->update(['img' => $data['path']]) ;
+            }
+             // Save zones (banners_with_zones table)
+            if ($request->filled('zone_id')) {
+                $banner->zones()->sync($request->zone_id);
             }
 
             Flash::success('Banner saved successfully.');
@@ -95,8 +107,9 @@ class BannerController extends Controller
             return redirect(route('banners.index'));
         }
 
-
-        return view('admin.banner.edit')->with('banner', $banner)
+        $zones = Zone::where('status', '1')->orderBy('name', 'DESC')->pluck('name', 'id')->toArray();
+        $zoneOptionSelected = $banner->zones->pluck('id')->toArray();
+        return view('admin.banner.edit')->with('banner', $banner)->with('zoneOption', $zones)->with('zoneOptionSelected', $zoneOptionSelected)
            ;
     }
 
@@ -113,6 +126,8 @@ class BannerController extends Controller
         $request->validate([
             'title'=> 'required|max:250',
             'description'=> 'required|max:500',
+            'zone_id'     => 'required|array',
+            'zone_id.*'   => 'exists:zones,id',
         ]);
 
         $banner = Banner::find($id);
@@ -122,7 +137,7 @@ class BannerController extends Controller
             return redirect(route('banners.index'));
         }
        
-        $input = $request->except(['image']) ;
+        $input = $request->except(['image', 'zone_id']) ;
         $result =  $banner->update($input);
         if(!empty($request->image)){
             if(file_exists(public_path($banner->img))){
@@ -131,6 +146,7 @@ class BannerController extends Controller
             $data = $this->uploadFile($request->file('image'), 'banners') ;
             $banner->update(['img' => $data['path']]) ;
         }
+        $banner->zones()->sync($request->zone_id ?? []);
         Flash::success('Banner updated successfully.');
 
         return redirect(route('banners.index'));
@@ -153,6 +169,7 @@ class BannerController extends Controller
         if(!empty($banner->image) && is_file(public_path($banner->img))){
             unlink(public_path($banner->img));
         }
+        $banner->zones()->detach();
         $banner->delete();
 
         Flash::success('Banner deleted successfully.');

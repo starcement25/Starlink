@@ -36,6 +36,15 @@ class SettingsController extends Controller
         return response()->json(['status' => true, 'msg' => 'Settings get successfully', 'data' => [$result]]); 
       
     }
+    function delete_account_btn()
+    {
+        $settings = Setting::where('setting_name','delete_account_btn')->pluck('setting_value')->toArray();
+        $versionArray=[];
+        //$versionArray['btn_status']= $settings[0];
+        $val= (int) $settings[0];
+        return response()->json(['status' => $val]);
+        //return response()->json(['status' => true, 'msg' => 'Status get successfully', 'data' => [$versionArray]]);
+    }
 
     function appVersions()
     {

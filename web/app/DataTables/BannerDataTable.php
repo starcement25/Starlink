@@ -45,15 +45,18 @@ class BannerDataTable extends DataTable
                        '.csrf_field().'
                         <input name="_method" type="hidden" value="DELETE">
                         <div class="btn-group">
-                        <!-- <a href="'.route('banners.edit', ['banner'=> $banner->id]).'" class="btn btn-default btn-xs">
+                         <a href="'.route('banners.edit', ['banner'=> $banner->id]).'" class="btn btn-default btn-xs">
                             <i class="far fa-edit"></i>
-                        </a> -->
+                        </a> 
                         <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm(\'Are you sure?\')">
                             <i class="far fa-trash-alt"></i>
                         </button>
                     </div>
                     </form>';
          })
+        ->addColumn('zones', function ($banner) {
+                return $banner->zones->pluck('name')->implode(', ');
+            })
         ->rawColumns(['img', 'action', 'status'])
         ;
 
@@ -68,7 +71,7 @@ class BannerDataTable extends DataTable
      */
     public function query(Banner $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->with('zones');
     }
 
     /**
@@ -104,8 +107,14 @@ class BannerDataTable extends DataTable
     {
         return [
 
+            
             Column::make('title'),
             Column::make('description'),
+            Column::computed('zones')
+            ->title('Zones')
+            ->exportable(false)
+            ->printable(true),
+
             Column::make('img')->title('Image')->exportable(false),
             Column::make('status'),
             Column::computed('action')

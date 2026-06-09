@@ -53,7 +53,7 @@
                         </div>
                         <div class="form-group col-md-2" >
                             <label for="">&nbsp; </label>
-                            <button id="export" type="button" class="btn btn-info form-control" onclick="download()">
+                            <button id="export" type="button" class="btn btn-info form-control export-btn">
                                 {{-- <span id="progressCount" hidden></span> --}}
                                 <span id="snipping_loader" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" hidden></span>
                                 <span id="export_btn_text">Export</span>
@@ -121,7 +121,7 @@
    
 @endsection
 @push('verify-lifting-blade')
-    <script>
+    <script nonce="{{ $cspNonce }}">
         $(document).ready(function(){
             // $('#mason').select2();
             // $('#mason').one('select2:open', function(e) {
@@ -133,6 +133,9 @@
             //         searchMason(searchVal);
             //     });
             // });
+            $(document).on('click', '.export-btn', function () {
+    download();
+});
             $('#filterForm').on('submit', function(e){
                 e.preventDefault() ;
                 if($('#fromDate').val() != "" && $('#toDate').val() !=""){

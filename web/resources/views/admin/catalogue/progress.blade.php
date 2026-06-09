@@ -73,7 +73,7 @@
 </div>
 @endsection
 @push('branch-bulk-upload-blade')
-    <script>
+    <script nonce="{{ $cspNonce }}">
         var timer ;
         $(document).ready(function(){
             getProgress();

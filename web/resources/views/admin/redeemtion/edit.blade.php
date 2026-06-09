@@ -130,6 +130,23 @@
                              </td>
                         </tr>
                          
+                        @if($redeemtion->status == "0")
+                            <tr>
+                                <td>Order Pending Reason</td>
+                                <td>
+                                    <select name="order_pending_reason" id="order_pending_reason" class="form-control">
+                                        <option value="">Select Pending Reason</option>
+                                        @foreach(($orderPendingReasons ?? []) as $orderPendingReason)
+                                            <option value="{{ $orderPendingReason->reason }}" @if (old('order_pending_reason', $redeemtion->order_pending_reason ?? '') == $orderPendingReason->reason) {{ "selected" }} @endif>{{ $orderPendingReason->reason }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('order_pending_reason')
+                                        <span class="text text-danger">{{ $message }}</span>
+                                    @enderror
+                                </td>
+                            </tr>
+                        @endif
+
                         <tr id="tracking_div" @if(!in_array($redeemtion->status, [App\Models\UserCatalogueRedeemtion::STATUS_ORDER_PLACED])) style="display:none;" @endif>
                             <td>Order Tracking URL</td>
                             <td>
@@ -151,6 +168,17 @@
                                 @endif
                             </td>
                         </tr>
+                            @if ($redeemtion->feedback!='')
+                        <tr>
+                            <td>Feedback</td>
+                            <td>
+                               
+                                    {{ $redeemtion->feedback ?? '' }}
+                             
+                                
+                            </td>
+                        </tr>
+                            @endif
                         <tr>
                             <td>Delivery Date</td>
                             <td>
@@ -158,7 +186,8 @@
                                     {{ $redeemtion->delivery_date ?? '' }}
 
                                 @else
-                                    <input type="date" name="delivery_date" id="delivery_date" class="form-control" value="{{ $redeemtion->delivery_date ?? "" }}" min= {{ date('Y-m-d',strtotime($redeemtion->created_at)) ?? "" }}>
+                                    <!-- <input type="date" name="delivery_date" id="delivery_date" class="form-control" value="{{ $redeemtion->delivery_date ?? "" }}" min= {{ date('Y-m-d',strtotime($redeemtion->created_at)) ?? "" }}> -->
+                                    <input type="date" name="delivery_date" id="delivery_date" class="form-control" value="{{ $redeemtion->delivery_date ?? "" }}" >
                                     @error('delivery_date')
                                         <span class="text text-danger">{{ $message }}</span>
                                     @enderror
@@ -190,7 +219,7 @@
     </div>
 @endsection
 @push('page_scripts')
-   <script>
+   <script nonce="{{ $cspNonce }}">
         $(document).ready(function(){
            $('#statusForm').on('submit', function(e){
             if($('#status').val() == 2){

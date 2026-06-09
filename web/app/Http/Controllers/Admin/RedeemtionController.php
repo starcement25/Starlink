@@ -77,10 +77,19 @@ class RedeemtionController extends Controller
     {
         \Helper::checkIsUserAuthorizeToPerformTheTask('redeemtions.edit') ;
         $redeemtion = UserCatalogueRedeemtion::with('catalogue')->with('user')->findOrFail($id);
+        $orderPendingReasons = DB::table('order_pending_reason')
+            ->select('id', 'reason')
+            ->where('status', 1)
+            ->orderBy('id', 'ASC')
+            ->get();
         //  return $redeemtion ;
         $isRoleAbleToRejectRedemption = $this->isRoleAbleToRejectRedemption(\Auth::user()->role);
 
-        return view('admin.redeemtion.edit', ['redeemtion'=> $redeemtion, 'isRoleAbleToRejectRedemption' => $isRoleAbleToRejectRedemption]) ;
+        return view('admin.redeemtion.edit', [
+            'redeemtion'=> $redeemtion,
+            'isRoleAbleToRejectRedemption' => $isRoleAbleToRejectRedemption,
+            'orderPendingReasons' => $orderPendingReasons,
+        ]) ;
     }
 
     /**
@@ -351,6 +360,7 @@ class RedeemtionController extends Controller
             'Delivery Confirmed',
             'Delivery Confirmed on',
             'Remarks',
+            'Order Pending Reason',
             'Delivery Date',
             'System Delivery Date Updated At',
             'Catalogue Point',
@@ -395,6 +405,7 @@ class RedeemtionController extends Controller
                     $val->getDeliveryConfirmationStatus(),
                     $val->delivery_confirmation_datetime,
                     $val->remarks,
+                    $val->order_pending_reason,
                     isset($val->delivery_date) ? date('d-m-Y', strtotime($val->delivery_date)) : "",
                     isset($val->system_delivery_date_updated_at) ? date('d-m-Y', strtotime($val->system_delivery_date_updated_at)) : "",
                     $val->catalogue_point,
@@ -548,7 +559,7 @@ class RedeemtionController extends Controller
     // }
 
     
-    public function uploadCsvFile(Request $request)
+    /*public function uploadCsvFile(Request $request)
     {
         \Helper::checkIsUserAuthorizeToPerformTheTask('redeemtions.bulk-upload') ;
         set_time_limit(0);
@@ -591,6 +602,7 @@ class RedeemtionController extends Controller
                             {
                                 return str_replace(["\r", "\n"], ' ', $value);
                             }, $rowLine);
+                            $row[0] = preg_replace('/\s+/', '', $row[0] ?? '');
                             if(!empty($row[0]) || !empty($row[1]))
                             {
                                 if(empty($row[0]))
@@ -616,7 +628,6 @@ class RedeemtionController extends Controller
                                
 
                                 $redeemtionRecord = UserCatalogueRedeemtion::where('order_id', $row[0])->first();
-                                $oldValues        = $redeemtionRecord->getOriginal();
 
                                 if(empty($redeemtionRecord))
                                 {
@@ -624,6 +635,7 @@ class RedeemtionController extends Controller
                                     $unProcessedCount++ ;
                                     continue;
                                 }
+                                $oldValues        = $redeemtionRecord->getOriginal();
                                 
                                 // To Change The Status delivered.
                                 if($row[1] == 1 && !in_array($redeemtionRecord->status, $statusBeforeDelivered)){
@@ -734,6 +746,309 @@ class RedeemtionController extends Controller
                                 if(!empty($user->fcm_token)){
 
                                     $allTitle = ['1' => 'Order Delivered', '2'=> 'Order Rejected', '3'=> 'Order Placed', '4' => 'Order Undelivered'] ;
+                                    $title    =  $allTitle[$row[1]] ?? 'Notification';
+                                    $data     = ['data'=> 'My Data'];
+
+                                    $this->send_fcm_notification($user->fcm_token, $title, $body, $data);
+                                }
+
+                            // ----------- To Send APP Notification -----------
+
+                            $notificationData = [
+                                    "notification_type" => "Order Update",
+                                    "data" => [
+                                        "msg" => $body. ' ' .Carbon::now(),
+                                    ]
+                                ]; 
+
+                            Notification::send($user, new StarLinkNotification($notificationData));
+
+
+                            // ---------------- Log Entry. -----------------------------
+
+                                // Changed Values & Old Value History.
+                                $changedValues = $redeemtionRecord->getChanges();
+
+                                $diff = [] ;
+
+                                foreach ($changedValues as $key => $item) {
+                                    $diff[$key] = [
+                                    'old_data' =>  $oldValues[$key],
+                                    'new_data' =>  $item,
+                                    ];
+                                }
+
+                                // Log Entry.
+                                $logData = [
+                                    'table_id' => $redeemtionRecord->id,
+                                    'user_id' => \Auth::user()?->id,
+                                    'model_name' => 'UserCatalogueRedeemtion',
+                                    'request'=> json_encode($input) ,
+                                    'response'=> json_encode($changedValues) ,
+                                    'action' => 'update',
+                                    'remarks'=> 'redeemtion edit by bulk upload',
+                                    'data_updated' => json_encode($diff),
+                                ];
+
+                                $this->createLog($logData) ;
+
+
+
+                                $count++ ;
+                                session()->put('redeemtion_count', $count) ;
+                                
+                                // $request->session()->save();
+                                // sleep(10) ;
+                               
+                              //  echo session()->get('total_count');
+                               
+                            
+                            }
+                           
+                        
+                        }
+                        if($rowCount == $lineSllice){
+                            $request->session()->save();
+                            // sleep(1) ;
+                        }
+                       
+                        $rowCount++;
+                }
+                fclose($importingFile);
+                $request->session()->forget('redeemtion_import');
+                unlink($fileWithPath);
+                DB::commit();
+                 
+                return response()->json(['success'=> true, '$rowCount'=> $rowCount, 'import_status'=> 1, 'message'=> 'Import Successfull '.session()->get('redeemtion_count').' records processed. & '.$unProcessedCount.' records unprocessed.'.implode(",",$unprocessedData)], 200); 
+    
+            }
+    
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            $request->session()->forget('redeemtion_import');
+            return response()->json(['success'=> false, 'import_status'=> 1, 'message'=> 'Error: '.$e->getMessage()], 200); ;
+    
+           
+        }
+                
+
+       
+    }*/
+        public function uploadCsvFile(Request $request)
+    {
+        \Helper::checkIsUserAuthorizeToPerformTheTask('redeemtions.bulk-upload') ;
+        set_time_limit(0);
+        try 
+        {
+            if($request->hasFile('csvFile'))
+            {
+               // 0= Pending, 1 = delivered, 2 = rejected, 3 = order placed, 4 = undelivered, 5 = delivery acknowledgement, 6 = complaint feedback.
+
+                $allowedStatus            = ['0','1', '2', '3', '4', '5'];
+                $statusBeforeDelivered    = ['3'];
+                $statusBeforeRejected     = ['0', '1', '3'];
+                $statusBeforeOrderPlaced  = ['0'];
+                $statusBeforeUndelivered  = ['1', '3', '5', '6'];
+
+                $file       = $request->file('csvFile');
+                $folderPath = \Storage::disk('public')->put('temp', $file);
+                $actualPath = storage_path($folderPath);
+                $fileWithPath =  \Storage::disk('public')->path($folderPath) ;
+                $records      = array_map('str_getcsv', file($fileWithPath));
+                $lineSllice   = floor(count($records) / 100) > 0 ? floor(count($records) / 100) : 1;
+                $count = 0; $unProcessedCount = 0;
+                session()->put('redeemtion_import', $fileWithPath) ;
+                session()->put('redeemtion_count', 0) ;
+                $unprocessedData=[];
+                $i=0;
+                $importingFile = fopen($fileWithPath, 'r');
+                // $headers = fgetcsv($importingFile);
+                $row = [];
+                $rowCount = 0;
+
+                DB::beginTransaction();
+                while (($rowLine = fgetcsv($importingFile)) !== false) 
+                {
+                        $i++;
+                        
+                        if($rowCount > 0)
+                        {
+                            $row = array_map(function ($value) 
+                            {
+                                return str_replace(["\r", "\n"], ' ', $value);
+                            }, $rowLine);
+                            $row[0] = preg_replace('/\s+/', '', $row[0] ?? '');
+                            if(!empty($row[0]) || !empty($row[1]))
+                            {
+                                if(empty($row[0]))
+                                {
+                                    array_push($unprocessedData,"<br>In row ".$i.", order ID is required. ");
+                                    $unProcessedCount++ ;
+                                    continue;
+                                }
+                               /* if(empty($row[1]))
+                                {
+                                    array_push($unprocessedData,"<br>In row ".$i.", order status is required. ");
+                                    $unProcessedCount++ ;
+                                    continue;
+                                }*/
+                                if(!isset($row[1]) || trim($row[1]) === '')
+                                    {
+                                        array_push($unprocessedData,"<br>In row ".$i.", order status is required. ");
+                                        $unProcessedCount++ ;
+                                        continue;
+                                    }
+
+                                if(!in_array($row[1], $allowedStatus))
+                                {
+                                    array_push($unprocessedData,"<br>In row ".$i.", Only order status delivered, order placed, Rejected are allowed only. ");
+                                    $unProcessedCount++ ;
+                                    continue;
+                                }
+
+                               
+
+                                $redeemtionRecord = UserCatalogueRedeemtion::where('order_id', $row[0])->first();
+
+                                if(empty($redeemtionRecord))
+                                {
+                                    array_push($unprocessedData,"<br>In row ".$i.", invalid order ID.");
+                                    $unProcessedCount++ ;
+                                    continue;
+                                }
+                                $oldValues        = $redeemtionRecord->getOriginal();
+                                
+                                // To Change The Status delivered.
+                                if($row[1] == 1 && !in_array($redeemtionRecord->status, $statusBeforeDelivered)){
+                                       array_push($unprocessedData,"<br>In row ".$i.", order should be order placed state to change the status to deivered.");
+                                       $unProcessedCount++ ;
+                                       continue;
+                                }
+
+                                if($row[1] == 1 && empty($row[5])){
+                                       array_push($unprocessedData,"<br>In row ".$i.", Deivery date is required when status is delivered");
+                                       $unProcessedCount++ ;
+                                       continue;
+                                }
+
+                                // To Change The Status Order Placed.
+                                if($row[1] == 3 && !in_array($redeemtionRecord->status, $statusBeforeOrderPlaced)){
+                                    
+                                       array_push($unprocessedData,"<br>In row ".$i.", order should be in pending state to chage the status to order placed.");
+                                       $unProcessedCount++ ;
+                                       continue;
+                                }
+
+                                if($row[1] == 3 && (empty(trim($row[3])) || empty(trim($row[4])))){
+                                       array_push($unprocessedData,"<br>In row ".$i.", Order tracking url & order tracking id is required when status is order placed");
+                                       $unProcessedCount++ ;
+                                       continue;
+                                }
+
+                                // To Change The Status Order Rejected.
+                                if($row[1] == 2 && !in_array($redeemtionRecord->status, $statusBeforeRejected)){
+                                       array_push($unprocessedData,"<br>In row ".$i.", order should be in pending state or order placed state to chage the status to rejected.");
+                                       $unProcessedCount++ ;
+                                       continue;
+                                }
+
+                                // Order Status Rejected & Remarks Is Empty.
+                                if($row[1] == 2 && (empty(trim($row[2])))){
+                                       array_push($unprocessedData,"<br>In row ".$i.", remarks is required when status is rejected.");
+                                       $unProcessedCount++ ;
+                                       continue;
+                                }
+
+                                // To Change The Status Undelivered.
+                                if($row[1] == 4 && !in_array($redeemtionRecord->status, $statusBeforeUndelivered)){
+                                       array_push($unprocessedData,"<br>In row ".$i.", Redeemption order status should be in delivered or delivery acknowledgement or complain/feedback to chage it undelivered.");
+                                       $unProcessedCount++ ;
+                                       continue;
+                                }
+                                // To Change The Status Pending.
+                                    if($row[1] == 0){
+                                        $orderPendingReason = DB::table('order_pending_reason')
+                                            ->where('id', $row[2])
+                                            ->where('status', 1)
+                                            ->value('reason');
+
+                                        $input = [
+                                            'status'  => $row[1],
+                                            
+                                        ];
+                                        if(empty($orderPendingReason)){
+                                        $input = [
+                                            
+                                            'remarks' => $row[2] ?? "",
+                                        ];
+                                        }
+                                        if(!empty($orderPendingReason)){
+                                            $input['order_pending_reason'] = $orderPendingReason;
+                                            $input['remarks'] = '';
+                                        }
+                                    }
+
+                                //Credit the Debited  Point (Update The Net Point.)
+                                if($row[1] == 2 || $row[1] == 4){
+           
+                                    $input = [
+                                        'status'=> $row[1],
+                                        'remarks'=> $row[2],
+                                    ];
+                                    $rejectedRedeemtionRecord = RejectedRedeemtion::where(['redeemtion_id'=> $redeemtionRecord->id,  'user_id' => $redeemtionRecord->user_id])->first() ;
+                                    RejectedRedeemtion::updateOrcreate(['id'=> $rejectedRedeemtionRecord->id ?? null], [
+                                                    'redeemtion_id'  => $redeemtionRecord->id,
+                                                    'user_id'        => $redeemtionRecord->user_id,
+                                                    'point_credited' => $redeemtionRecord->redeemed_point,
+                                                    'description'    => "Redemtion Rejected on Order NO. ".$redeemtionRecord->order_id,
+                                                    'remarks'        => $row[2] ?? "",
+                                    ]);
+
+                                    // Update User Net Point.
+                                    $this->updatePoint($redeemtionRecord->user_id);
+                                }
+                               
+
+                                
+                               
+                                if($row[1] == 3){ // Order Placed.
+                                    $input = [
+                                        'status' => $row[1],
+                                        'order_tracking_url' => $row[3] ?? "",
+                                        'order_tracking_id'  => $row[4] ?? "",
+                                       
+                                    ];
+                                }
+                                if($row[1] == 1){ // Order Delivered.
+                                   $input = [
+                                        'status' => $row[1],
+                                        'delivery_date' => date('Y-m-d', strtotime($row[5])) ?? "",
+                                        'system_delivery_date_updated_at' => now() ,
+                                    ]; 
+
+                                    
+                                }
+
+                                if($row[1] == 4){ // Order Undelivered.
+                                   $input = [
+                                        'status'   => $row[1],
+                                        'remarks'  => $row[2] ?? "",
+                                    ]; 
+                                }
+
+                                 // Update redeemtion status.
+                                $redeemtionRecord->update($input) ;
+
+                                 // ------ Push Notification ------
+
+                                $user      = User::find($redeemtionRecord->user_id);
+                                $catalogue = Catalogue::find($redeemtionRecord->catalogue_id);
+                                $body      =  $this->getNotificationMessage($request->status, $catalogue?->name, $redeemtionRecord->order_id);
+
+                                if(!empty($user->fcm_token)){
+
+                                    $allTitle = [ '0' => 'Order Pending', '1' => 'Order Delivered', '2'=> 'Order Rejected', '3'=> 'Order Placed', '4' => 'Order Undelivered'] ;
                                     $title    =  $allTitle[$row[1]] ?? 'Notification';
                                     $data     = ['data'=> 'My Data'];
 

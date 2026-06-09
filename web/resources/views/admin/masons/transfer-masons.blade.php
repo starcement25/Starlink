@@ -64,7 +64,7 @@
 @endsection
 
 @push('js')
-    <script>
+    <script nonce="{{ $cspNonce }}">
         const TE_ROLE = 1;
         const MASON_ROLE = 2;
         let oldTeFromVal = "";

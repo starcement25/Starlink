@@ -76,7 +76,7 @@
 </div>
 @endsection
 @push('dealer-sap-upload-blade')
-    <script>
+    <script nonce="{{ $cspNonce }}">
         var timer ;
         $(document).ready(function(){
           //  getProgress();

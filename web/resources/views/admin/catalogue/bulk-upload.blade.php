@@ -14,6 +14,29 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            
+
+            <div class="card mt-4">
+                <div class="card-header">{{ __('Upload Catalogue Images ZIP') }}</div>
+                {!! Form::open(['route'=> 'catalogue.images.upload', 'method'=> 'POST' ,'id'=> 'zipUploadForm', 'files' => true]) !!}
+                <div class="card-body">
+                    <div id="zipMessage"></div>
+                    <div class="mb-3" id="zipUploadField">
+                        {!! Form::label('zipFile', 'Zip File', ['class' => 'form-label']) !!}
+                        {!! Form::file('zipFile', ['class' => 'form-control', 'required'=> true, 'accept'=>".zip"]) !!}
+                         <small class="text-muted">Upload a zip containing catalogue images.<!-- Files will be extracted into the `catalogues` folder.--></small> 
+                    </div>
+
+                    <div class="row mb-0">
+                        <div class="col-md-6 offset-md-4">
+                            <button type="submit" class="btn btn-primary">
+                                {{ __('Upload ZIP') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {!! Form::close() !!}
+            </div>
             <div class="card">
                 <div class="card-header">{{ __('Bulk Upload Catalogues') }}</div>
                 {!! Form::open(['route'=> 'catalogue.upload.save', 'method'=> 'POST' ,'id'=> 'uploadForm', 'files' => true]) !!}
@@ -32,6 +55,7 @@
                             {!! Form::label('csvFile', 'Csv File', ['class' => 'form-label']) !!}
                          
                             {!! Form::file('csvFile', ['class' => 'form-control', 'required'=> true, 'accept'=>".csv"]) !!}
+                            <small class="text-muted">Use the image file name in CSV column 6. Upload the matching images ZIP below first.</small>
                             @error('csvFile')
                                 <span class="text-danger">  {{  $message }} </span>
                             @enderror
@@ -46,6 +70,7 @@
                         
                             {!! Form::label('csvFile', 'Csv File', ['class' => 'form-label']) !!}
                         {!! Form::file('csvFile', ['class' => 'form-control', 'required'=> true, 'accept'=>".csv"]) !!}
+                            <small class="text-muted">Use the image file name in CSV column 6. Upload the matching images ZIP below first.</small>
                             @error('csvFile')
                                 <span class="text-danger">  {{  $message }} </span>
                             @enderror
@@ -76,7 +101,7 @@
 </div>
 @endsection
 @push('dealer-bulk-upload-blade')
-    <script>
+    <script nonce="{{ $cspNonce }}">
         var timer ;
         $(document).ready(function(){
           //  getProgress();
@@ -85,7 +110,7 @@
                 $('#uploadField').css({'display':'none'});
                 $('#progress').css({'display':''});
                 
-                formData = new FormData();
+                let formData = new FormData();
                 formData.append("csvFile", $('#csvFile').prop("files")[0]);
               
                 $.ajax({
@@ -125,6 +150,37 @@
                     }
                 });
 
+            });
+
+            $('#zipUploadForm').on('submit', function(e){
+                e.preventDefault();
+
+                let zipFormData = new FormData();
+                zipFormData.append("zipFile", $('#zipFile').prop("files")[0]);
+
+                $.ajax({
+                    url: "{{ route('catalogue.images.upload') }}",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: zipFormData,
+                    dataType: "json",
+                    type: "POST",
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    enctype: "multipart/form-data",
+                    success: function(response) {
+                        if(response.success){
+                            $('#zipMessage').html('<div class="alert alert-success">'+response.message+'</div>');
+                            $('#zipFile').val("");
+                        }else{
+                            $('#zipMessage').html('<div class="alert alert-danger">'+response.message+'</div>');
+                            $('#zipFile').val("");
+                        }
+                    }
+                });
             });
         });
         function getProgress() {

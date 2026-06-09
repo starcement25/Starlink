@@ -38,7 +38,7 @@
     </div>
 @endsection
 @push('user-edit-blade')
-    <script>
+    <script nonce="{{ $cspNonce }}">
         $(document).ready(function(){
             $("#dealers").select2();
             

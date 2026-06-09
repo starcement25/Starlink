@@ -98,7 +98,7 @@ class MasonController extends AppBaseController
     {
         \Helper::checkIsUserAuthorizeToPerformTheTask('masons.create') ;
         $status = ['' => 'Select Status', '1'=> 'Married', '2'=> 'Un Married'];
-        $branchArr = Branch::select('id', 'name')->pluck('name', 'id')->toArray();
+        $branchArr = Branch::select('id', 'name')->where('status', 1)->pluck('name', 'id')->toArray();
         $branches = ['' => 'Select Branch'] + $branchArr ;
         $users = User::select('id', 'name')->where('status', '1')->whereIn('role', ['1'])->pluck('name', 'id')->toArray();
         $users = ['' => 'Select User'] + $users ;
@@ -175,7 +175,7 @@ class MasonController extends AppBaseController
 
             return redirect(route('masons.index'));
         }
-        $branchArr = Branch::select('id', 'name')->pluck('name', 'id')->toArray();
+        $branchArr = Branch::select('id', 'name')->where('status', 1)->pluck('name', 'id')->toArray();
         $branches = ['' => 'Select Branch'] + $branchArr ;
         $users = User::select('id', 'name')->where('status', '1')->whereIn('role', ['1'])->pluck('name', 'id')->toArray();
         $users = ['' => 'Select User'] + $users ;

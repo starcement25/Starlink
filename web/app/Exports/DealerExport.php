@@ -55,7 +55,7 @@ class DealerExport implements FromQuery, WithMapping, WithHeadings
     public function query()
     {
 
-        return User::with('roles')->with('branch')->with('dealer_linked')->whereIn('role', ['3', '4', '6'])->orderBy('id', 'DESC')
+        return User::with('roles')->with('branch')->with('dealer_linked')->where('status', 1)->whereIn('role', ['3', '4', '6'])->orderBy('id', 'DESC')
             ->select(["users.*"]);
     }
 }

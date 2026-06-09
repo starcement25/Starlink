@@ -26,6 +26,7 @@ class UserCatalogueRedeemtion extends Model
 
     protected $casts = [
         'delivery_confirmation_datetime' => 'datetime',
+        'order_pending_reason' => 'string',
     ];
 
     public function getDeliveryConfirmationStatus()

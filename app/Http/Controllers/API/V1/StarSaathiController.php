@@ -874,11 +874,14 @@ class StarSaathiController extends Controller
             $lifting->action_taken_at = Carbon::now()->format('y-m-d H:i:s');
             $lifting->action_taken_by = \Auth::user()->id;
             $lifting->save();
-            $isVerified = 1;
-            if(($dealerAvailableStock - $currentMonthLiftings) < $lifting->qty)
-            {
-                $isVerified = 0;
-            }
+            $isVerified = 0;
+
+            // As per discussion with client following condition is made.
+            // $isVerified = 1;
+            // if(($dealerAvailableStock - $currentMonthLiftings) < $lifting->qty)
+            // {
+            //     $isVerified = 0;
+            // }
             $rewards = Reward::where('lifting_id', $lifting->id)->get();
             $masonId = $rewards[0]->user_id;
             $point = 0;

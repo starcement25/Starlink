@@ -24,24 +24,26 @@ class UserDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+        $arr=[];
         return (new EloquentDataTable($query))
         ->editColumn('branch.name', function ($user) {
                 $branchIds=json_decode($user->allocated_branches);
-                $branches="";
-                $i=0;
                 if($branchIds != null)
                 {
+                    $branches = [];
                     foreach($branchIds as $val)
                     {
-                        if($i!=0)
-                        {
-                            $branches.=", "; 
+                        $branchName = Branch::where('id', $val)->value('name');
+
+                        if (empty($branchName)) {
+                           //dd($val);
+                            continue;
                         }
-                        $temp=Branch::where('id',$val)->pluck('name');
-                        $branches.=$temp[0];
-                        $i++;
+
+                        $branches[] = $branchName;
                     }
-                    return $branches;
+
+                    return implode(', ', $branches);
                 }
                 return "";
         })

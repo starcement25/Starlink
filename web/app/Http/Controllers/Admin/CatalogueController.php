@@ -16,6 +16,8 @@ use App\Http\Requests\Catalogue\CreateCatalogueRequest;
 use App\Http\Requests\Catalogue\UpdateCatalogueRequest;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
+use ZipArchive;
 
 class CatalogueController extends Controller
 {
@@ -325,39 +327,34 @@ class CatalogueController extends Controller
                         }
                         elseif(!isset($row[5]) || $row[5] === null || $row[5] === '')
                         {
-                            array_push($unprocessedData,"<br>Image Link of row ".($key + 1)." is required");
-                            $unProcessedCount++ ; 
-                            continue;
-                        }
-                        elseif(!filter_var($row[5], FILTER_VALIDATE_URL))
-                        {
-                            array_push($unprocessedData,"<br>Image Link of row ".($key + 1)." has Invalid URL format");
+                            array_push($unprocessedData,"<br>Image Name of row ".($key + 1)." is required");
                             $unProcessedCount++ ; 
                             continue;
                         }
                         else
                         {
-                            try {
-                                $head = Http::timeout(5)->head($row[5]);
-                                $contentType = strtolower($head->header('Content-Type') ?? '');
-                                if (!$head->ok() || strpos($contentType, 'image/') !== 0) {
-                                    throw new \Exception("Not a valid image response");
-                                }
-                            } catch (\Throwable $ex) {
-                                // array_push($unprocessedData, "<br>Image Link of row ".($key + 1)." is not a valid image or unreachable: " . $ex->getMessage());
-                                array_push($unprocessedData, "<br>Image Link of row ".($key + 1)." is not a valid image or unreachable.");
-                                $unProcessedCount++; 
+                            $imageName = trim($row[5]);
+                            $imageSourcePath = public_path('catalogues/'.$imageName);
+
+                            if (str_contains($imageName, '..') || str_contains($imageName, '/') || str_contains($imageName, '\\')) {
+                                array_push($unprocessedData,"<br>Image Name of row ".($key + 1)." is invalid");
+                                $unProcessedCount++;
                                 continue;
                             }
 
+                            if (!file_exists($imageSourcePath)) {
+                                array_push($unprocessedData,"<br>Image Name of row ".($key + 1)." was not found in catalogues folder");
+                                $unProcessedCount++;
+                                continue;
+                            }
+
+                            $mimeType = File::mimeType($imageSourcePath);
                             try {
-                                $imageFromLink = Http::timeout(10)->get($row[5]);
-                                if (!$imageFromLink->ok()) {
-                                    throw new \Exception("Image download failed");
+                                if (strpos(strtolower($mimeType ?? ''), 'image/') !== 0) {
+                                    throw new \Exception("Not a valid image file");
                                 }
                             } catch (\Throwable $ex) {
-                                // array_push($unprocessedData, "<br>Image Link of row ".($key + 1)." failed to download: " . $ex->getMessage());
-                                array_push($unprocessedData, "<br>Image Link of row ".($key + 1)." failed to download.");
+                                array_push($unprocessedData, "<br>Image Name of row ".($key + 1)." is not a valid image.");
                                 $unProcessedCount++; 
                                 continue;
                             }
@@ -369,14 +366,13 @@ class CatalogueController extends Controller
                                 
                         if(empty($catalogue))
                         {
-                            $uploadImage = $this->uploadDownloadedFileFromLink($imageFromLink, 'catalogues') ;
                             $tempCatalogue =  Catalogue::create([
                                 'name' => mb_convert_encoding($row[0] ?? NULL, 'UTF-8', 'ISO-8859-1'),
                                 'mason_category_id' => mb_convert_encoding($masonCategory->id, 'UTF-8', 'ISO-8859-1'),
                                 'description' => mb_convert_encoding($row[1] ?? NULL, 'UTF-8', 'ISO-8859-1'),
                                 'point' => mb_convert_encoding($row[2] ?? NULL, 'UTF-8', 'ISO-8859-1'),
                                 'status' => mb_convert_encoding($row[3] ?? NULL, 'UTF-8', 'ISO-8859-1'),
-                                'image' => mb_convert_encoding($uploadImage['path'] ?? NULL, 'UTF-8', 'ISO-8859-1'),
+                                'image' => mb_convert_encoding('catalogues/'.trim($row[5]), 'UTF-8', 'ISO-8859-1'),
                                 'catalogue_type_id' => mb_convert_encoding($catalogueTypeID, 'UTF-8', 'ISO-8859-1'),
                             ]);
                             $updatedCatalogueCode = 'CAT'.str_pad($tempCatalogue->id, 4, "0", STR_PAD_LEFT);
@@ -425,6 +421,7 @@ class CatalogueController extends Controller
                 if(session()->get('catalogue_count') > 0)
                 {
                     Catalogue::where('created_at', '<', Carbon::today())
+                    ->where('status', 1)
                     ->update([
                         'status' => Catalogue::STATUS_DISABLE
                     ]);
@@ -473,34 +470,78 @@ class CatalogueController extends Controller
     public function showImagesUploadForm()
     {
         \Helper::checkIsUserAuthorizeToPerformTheTask('catalogues.bulk-upload') ;
-        Flash::Warning('Service is unavailable.');
-        return redirect(route('catalogues.index'));
+        //Flash::Warning('Service is unavailable.');
+       // return redirect(route('catalogues.index'));
         return view('admin.catalogue.images-upload') ;
     }
     public function uploadImages(Request $request)
-    {
-        \Helper::checkIsUserAuthorizeToPerformTheTask('catalogues.bulk-upload') ;
-        try {
-            Flash::Warning('Service is unavailable.');
-            return redirect(route('catalogues.index'));
-            set_time_limit(0);
-            $count = 0 ;
+{
+    \Helper::checkIsUserAuthorizeToPerformTheTask('catalogues.bulk-upload');
 
-            // Starting File Upload.
-            foreach ($request->my_files as $key => $file) {
-                if(is_file($file)) {   
+    try {
+        set_time_limit(0);
 
-                    $fpath = $this->uploadData($file, 'catalogues') ;
-                    $count++ ;
-                }
-            }
-            return response()->json(['success'=> true, 'import_status'=> 1, 'message'=> 'Upload Successfull '.$count.' records uploaded.'], 200);
-
-
-        } catch (\Exception $ex) {
-            return response()->json(['success'=> false, 'import_status'=> 1, 'message'=> 'Error: '.$ex->getMessage()], 200);
+        if (!$request->hasFile('zipFile')) {
+            return response()->json([
+                'success' => false,
+                'import_status' => 1,
+                'message' => 'Zip file is required.'
+            ], 200);
         }
+
+        $request->validate([
+            'zipFile' => 'required|file|mimes:zip',
+        ]);
+
+        $zipFile = $request->file('zipFile');
+
+        // Save ZIP temporarily
+        $zipPath = storage_path('app/temp_' . time() . '.zip');
+        $zipFile->move(dirname($zipPath), basename($zipPath));
+
+        $extractPath = public_path('catalogues');
+
+        if (!File::exists($extractPath)) {
+            File::makeDirectory($extractPath, 0755, true);
+        }
+
+        // IMPORTANT: escape shell arguments
+        $command = "unzip -o " . escapeshellarg($zipPath) . " -d " . escapeshellarg($extractPath);
+
+        exec($command, $output, $returnCode);
+       /* exec($command . ' 2>&1', $output, $returnCode);
+
+        dd([
+            'command' => $command,
+            'output' => $output,
+            'returnCode' => $returnCode
+        ]);*/
+
+        // Delete temp zip
+        @unlink($zipPath);
+
+        if ($returnCode !== 0) {
+            return response()->json([
+                'success' => false,
+                'import_status' => 1,
+                'message' => 'Unzip failed. Please check server configuration.'
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => true,
+            'import_status' => 1,
+            'message' => 'Zip extracted successfully using Linux unzip command.'
+        ], 200);
+
+    } catch (\Throwable $ex) {
+        return response()->json([
+            'success' => false,
+            'import_status' => 1,
+            'message' => 'Error: ' . $ex->getMessage()
+        ], 200);
     }
+}
     public function cataloguesExport() 
     {
         return Excel::download(new CatalogueExport, 'Catalogues.xlsx');

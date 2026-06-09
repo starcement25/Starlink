@@ -104,14 +104,14 @@
         </div>
         @push('third_party_scripts')
             @include('admin.layouts.datatables_js')
-            {!! $dataTable->scripts() !!}
+            {!! $dataTable->scripts(attributes: ['nonce' => $cspNonce]) !!}
         @endpush
     </div>
 
 @endsection
 
 @push('mason-create-blade')
-    <script>
+    <script nonce="{{ $cspNonce }}">
         $(document).ready(function(){
             $('#id_filter_by').on('change', function(){
                 if($(this).val() == 2){

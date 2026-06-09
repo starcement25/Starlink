@@ -40,7 +40,7 @@
 
 @push('js')
 
-    <script>
+    <script nonce="{{ $cspNonce }}">
         $(document).ready(function(){
             $('#linked_dealer').select2();
         });

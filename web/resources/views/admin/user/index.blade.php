@@ -29,7 +29,7 @@
             </div>
 
         </div>
-        {!! $dataTable->scripts() !!}
+        {!! $dataTable->scripts(attributes: ['nonce' => $cspNonce]) !!}
     </div>
 
 @endsection

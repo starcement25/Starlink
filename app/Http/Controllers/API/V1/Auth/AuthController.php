@@ -3,21 +3,23 @@
 namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\MobileVerification;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Auth\Events\Registered;
-use Mail;
-use Auth;
-use Session;
-use Twilio\Rest\Client;
-use Illuminate\Support\Facades\Http;
-use Carbon\Carbon;
-use Laravel\Passport\Token;
+use App\Models\User;
+use App\Models\UserDisableHistory;
 use App\Services\GoogleTranslateService;
 use App\Utils\LocalLanguageTranslation;
+use Auth;
+use Carbon\Carbon;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
+use Laravel\Passport\Token;
+use Mail;
+use Session;
+use Twilio\Rest\Client;
+
 class AuthController extends Controller
 {
     protected $googleTranslate;
@@ -453,6 +455,7 @@ class AuthController extends Controller
 
     function deleteAccount(Request $request)
     {
+        
         $targetLanguage = null;
         if($request->has("preferred_app_lang") && !empty($request->preferred_app_lang))
         {
@@ -466,9 +469,18 @@ class AuthController extends Controller
         $user = User::find($userId);
         if($user)
         {
-            $user->status = 0;
-            $user->save();
-            $request->user()->token()->revoke();
+            //comment out as per request 05-05-2026
+            // $user->status = 0;
+            // $user->save();
+            //$request->user()->token()->revoke();
+
+            // Save the account deletion log
+             UserDisableHistory::create([
+                    "user_id" => $userId,
+                    "disable_date_time" => Carbon::now(),
+                    "disable_reason" => 'User Has Deleted Account From App.',
+                    "point_deducted" => 0,
+            ]);
 
             return response()->json(['status'=>true,'msg' => $this->localLanguageTranslate->translate("Account_deleted_successfully", $targetLanguage)], 200);
         }

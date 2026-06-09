@@ -87,13 +87,13 @@
             </div>
 
         </div>
-        {!! $dataTable->scripts() !!}
+        {!! $dataTable->scripts(attributes: ['nonce' => $cspNonce]) !!}
     </div>
 
 @endsection
 
 @push('verify-lifting-blade')
-    <script>
+    <script nonce="{{ $cspNonce }}">
         const selectedMason = @json($selectedMason);
         $(document).ready(function(){
             $('#mason').select2({

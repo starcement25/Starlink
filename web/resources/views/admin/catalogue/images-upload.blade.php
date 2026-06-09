@@ -63,7 +63,7 @@
 </div>
 @endsection
 @push('catalogue-image-upload-blade')
-    <script>
+    <script nonce="{{ $cspNonce }}">
         var timer ;
         $(document).ready(function(){
             $('#uploadForm').on('submit', function(e){

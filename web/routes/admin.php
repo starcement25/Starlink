@@ -24,7 +24,8 @@ use App\Http\Controllers\Admin\StaticPageController;
 use App\Http\Controllers\Admin\ContactPageController;
 use App\Http\Controllers\Admin\MasonCategoryController;
 use App\Http\Controllers\Admin\CustomerLiftingController;
-
+use App\Http\Controllers\Cron\DealerSyncController;
+use App\Http\Controllers\Cron\BranchSyncController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,6 +42,11 @@ Route::group(['as' => 'admin.', 'middleware' => ['guest', 'prevent_dealer']], fu
     Route::post('/login', [LoginController::class, 'authenticate'])->name('authenticate');
 });
 
+Route::group(['as' => 'debug.'], function() {
+    
+    Route::get('/cron/sync-dealers', [DealerSyncController::class, 'syncDealersFromApi'])->name('cron.sync-dealers');
+    Route::get('/cron/sync-branches', [BranchSyncController::class, 'syncBranchesFromApi'])->name('cron.sync-branches');
+});
 
 
 Route::group(['middleware' => ['preventBackHistory', 'auth', 'prevent_dealer']], function() {

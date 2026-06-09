@@ -1,2 +1,2 @@
-order_id,"status (1=Delivered, 2 = rejected, 3 = Order Placed, 4= Undelivered)",remarks,order_tracking_url,tracking_ord_id,delivery_date (d-m-Y)
+order_id,"status (0= Pending, 1=Delivered, 2 = rejected, 3 = Order Placed, 4= Undelivered)","remarks 1=Order confirmation not received, 2=Address Confirmation not received, 3=Product Unavailability & Alternatives, 4=Customer not answering the call,5=Wrong/incomplete delivery address, 6=Wrong mobile number",order_tracking_url,tracking_ord_id,delivery_date (d-m-Y)
 TEST001,2,Test Rejection,,,

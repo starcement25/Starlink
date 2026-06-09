@@ -176,7 +176,7 @@
     </div>
 @endsection
 @push('page_scripts')
-   <script>
+   <script nonce="{{ $cspNonce }}">
         $(document).ready(function(){
            $('#statusForm').on('submit', function(e){
             if($('#status').val() == 2){
