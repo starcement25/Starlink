@@ -1,4 +1,4 @@
-framework module React_rendererconsistency {
+module react_renderer_consistency {
   umbrella header "React-rendererconsistency-umbrella.h"
 
   export *

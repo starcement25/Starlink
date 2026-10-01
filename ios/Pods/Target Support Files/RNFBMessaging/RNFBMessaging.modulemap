@@ -1,4 +1,4 @@
-framework module RNFBMessaging {
+module RNFBMessaging {
   umbrella header "RNFBMessaging-umbrella.h"
 
   export *

@@ -22,7 +22,9 @@ target 'starlink' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-
+pod 'GoogleUtilities', :modular_headers => true
+pod 'FirebaseCoreInternal', :modular_headers => true
+pod 'FirebaseCore', :modular_headers => true
   # target 'starlinkTests' do
   #   inherit! :complete
   #   # Pods for testing

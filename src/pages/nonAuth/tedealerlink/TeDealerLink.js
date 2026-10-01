@@ -22,7 +22,6 @@ const TeDealerLink = props => {
 
     const [loading, setLoading] = useState(false)
     const [LiftingState, setLiftingState] = useState('Pending')
-    const [listData, setListData] = useState('')
     const [pendingListData, setPendingListData] = useState([])
     const [approveListData, setApprovedListData] = useState([])
     const [rejectListData, setRejectListData] = useState([])
@@ -95,7 +94,7 @@ const TeDealerLink = props => {
             .catch(err => {
                 setFlatListLoader(false)
                 setLoading(false)
-                
+
             })
     }
 
@@ -137,7 +136,7 @@ const TeDealerLink = props => {
             })
             .catch(err => {
                 setFlatListLoader(false)
-                    
+
             })
     }
 
@@ -179,7 +178,7 @@ const TeDealerLink = props => {
             })
             .catch(err => {
                 setFlatListLoader(false)
-                    
+
             })
     }
 
@@ -227,7 +226,7 @@ const TeDealerLink = props => {
                 }
             })
             .catch(err => {
-                
+
                 setLoading(false)
                 setAccptBtn(true)
                 showToast('error', messageList.t4)
@@ -251,7 +250,7 @@ const TeDealerLink = props => {
                 }
             })
             .catch(err => {
-                
+
                 setLoading(false)
                 setRejctBtn(true)
                 showToast('error', messageList.t4)
@@ -301,9 +300,7 @@ const TeDealerLink = props => {
                     </View>
                     <View style={{ width: 1, height: '65%', backgroundColor: '#FFD5D6' }} />
                     <View style={{ flex: 1, height: '100%', flexDirection: 'column', justifyContent: 'center', paddingLeft: 10 }}>
-                        <Text style={{ color: 'black', fontSize: 15 }}>
-                            {convertForShowData(item.value)}
-                        </Text>
+                        <Text style={{ color: 'black', fontSize: 15 }}> {convertForShowData(item.value)} </Text>
                     </View>
                 </View> : null}
             </>
@@ -322,23 +319,15 @@ const TeDealerLink = props => {
                     />
                     {flagEdit == 'pending' ? <View style={{ height: 10 }}></View> : null}
                     {flagEdit == 'pending' ? (<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <TouchableOpacity
-                            onPress={() => validReject(item)}
-                            style={{ flex: 1, height: 38, justifyContent: 'center', alignItems: 'center', backgroundColor: '#EE1D23', borderRadius: 5, }}>
-                            <Text style={{ color: '#FFFFFF', fontSize: 14, fontWeight: '600' }}>
-                                {convertForShowData(textValue.REJECT)}
-                            </Text>
+                        <TouchableOpacity onPress={() => validReject(item)} style={{ flex: 1, height: 38, justifyContent: 'center', alignItems: 'center', backgroundColor: '#EE1D23', borderRadius: 5, }}>
+                            <Text style={{ color: '#FFFFFF', fontSize: 14, fontWeight: '600' }}> {convertForShowData(textValue.REJECT)} </Text>
                         </TouchableOpacity>
                         <View style={{ width: 5 }} />
-                        <TouchableOpacity
-                            onPress={() => {
-                                setSlectedItem(item)
-                                setModalVisible(true)
-                            }}
-                            style={{ flex: 1, height: 38, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1F9A43', borderRadius: 5, }}>
-                            <Text style={{ color: '#FFFFFF', fontSize: 14, fontWeight: '600' }}>
-                                {convertForShowData(textValue.ACCEPT)}
-                            </Text>
+                        <TouchableOpacity onPress={() => {
+                            setSlectedItem(item)
+                            setModalVisible(true)
+                        }} style={{ flex: 1, height: 38, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1F9A43', borderRadius: 5, }}>
+                            <Text style={{ color: '#FFFFFF', fontSize: 14, fontWeight: '600' }}> {convertForShowData(textValue.ACCEPT)} </Text>
                         </TouchableOpacity>
                     </View>
                     ) : null}
@@ -350,11 +339,7 @@ const TeDealerLink = props => {
 
     const renderFooter = () => {
         return !flatlistLoader ? null : (
-            <View style={{
-                paddingHorizontal: 20,
-                paddingTop: 20,
-                alignItems: 'center',
-            }}>
+            <View style={{ paddingHorizontal: 20, paddingTop: 20, alignItems: 'center', }}>
                 <ActivityIndicator size='large' color='#ee1d23' />
             </View>
         )
@@ -368,17 +353,10 @@ const TeDealerLink = props => {
                 <View style={{ height: Platform.OS == 'ios' ? 25 : 0 }} />
                 <View style={{ width: '100%', height: 70 }}>
                     <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                        <Text style={{
-                            fontSize: 20,
-                            color: '#fff',
-                            fontWeight: '600',
-                            marginBottom: 20
-                        }}>{convertForShowData(textValue.DEALER_LINK_REQUEST)}</Text>
+                        <Text style={{ fontSize: 20, color: '#fff', fontWeight: '600', marginBottom: 20 }}>{convertForShowData(textValue.DEALER_LINK_REQUEST)}</Text>
                     </View>
                     <View style={{ height: '100%', paddingHorizontal: 15, flexDirection: 'column', justifyContent: 'center', position: 'absolute' }}>
-                        <TouchableOpacity onPress={() => {
-                            props.navigation.navigate('Dashboard')
-                        }}>
+                        <TouchableOpacity onPress={() => { props.navigation.navigate('Dashboard') }}>
                             <Image style={{ height: 30, width: 30, }} source={Icons.back} />
                         </TouchableOpacity>
                     </View>
@@ -386,47 +364,23 @@ const TeDealerLink = props => {
                 <View style={{ width: '100%', flex: 1, paddingHorizontal: 30 }}>
                     <View style={{ width: '100%', height: '100%', backgroundColor: '#FFF', borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingVertical: 15, paddingHorizontal: 10 }}>
                         <View style={{ flexDirection: 'row', paddingVertical: 10, justifyContent: 'space-between', alignItems: 'center' }}>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    setLiftingState(() => 'Pending')
-                                    setPendingListData([])
-                                }}
-                                style={{ paddingHorizontal: 20, paddingVertical: 10, backgroundColor: LiftingState == 'Pending' ? '#FFF5F6' : '#0000', borderRadius: 5 }}>
-                                <Text
-                                    style={{
-                                        color: LiftingState == 'Pending' ? '#EE1D23' : '#292929',
-                                        fontSize: 16,
-                                    }}>
-                                    {convertForShowData(textValue.Pending)}
-                                </Text>
+                            <TouchableOpacity onPress={() => {
+                                setLiftingState(() => 'Pending')
+                                setPendingListData([])
+                            }} style={{ paddingHorizontal: 20, paddingVertical: 10, backgroundColor: LiftingState == 'Pending' ? '#FFF5F6' : '#0000', borderRadius: 5 }}>
+                                <Text style={{ color: LiftingState == 'Pending' ? '#EE1D23' : '#292929', fontSize: 16, }}> {convertForShowData(textValue.Pending)} </Text>
                             </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    setLiftingState(() => 'Approved')
-                                    setApprovedListData([])
-                                }}
-                                style={{ paddingHorizontal: 20, paddingVertical: 10, backgroundColor: LiftingState == 'Approved' ? '#FFF5F6' : '#0000', borderRadius: 5 }}>
-                                <Text
-                                    style={{
-                                        color: LiftingState == 'Approved' ? '#EE1D23' : '#292929',
-                                        fontSize: 16,
-                                    }}>
-                                    {convertForShowData(textValue.Approved)}
-                                </Text>
+                            <TouchableOpacity onPress={() => {
+                                setLiftingState(() => 'Approved')
+                                setApprovedListData([])
+                            }} style={{ paddingHorizontal: 20, paddingVertical: 10, backgroundColor: LiftingState == 'Approved' ? '#FFF5F6' : '#0000', borderRadius: 5 }}>
+                                <Text style={{ color: LiftingState == 'Approved' ? '#EE1D23' : '#292929', fontSize: 16, }}> {convertForShowData(textValue.Approved)} </Text>
                             </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    setLiftingState('Reject')
-                                    setRejectListData([])
-                                }}
-                                style={{ paddingHorizontal: 20, paddingVertical: 10, backgroundColor: LiftingState == 'Reject' ? '#FFF5F6' : '#0000', borderRadius: 5 }}>
-                                <Text
-                                    style={{
-                                        color: LiftingState == 'Reject' ? '#EE1D23' : '#292929',
-                                        fontSize: 16,
-                                    }}>
-                                    {convertForShowData(textValue.Rejected)}
-                                </Text>
+                            <TouchableOpacity onPress={() => {
+                                setLiftingState('Reject')
+                                setRejectListData([])
+                            }} style={{ paddingHorizontal: 20, paddingVertical: 10, backgroundColor: LiftingState == 'Reject' ? '#FFF5F6' : '#0000', borderRadius: 5 }}>
+                                <Text style={{ color: LiftingState == 'Reject' ? '#EE1D23' : '#292929', fontSize: 16, }}> {convertForShowData(textValue.Rejected)} </Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{ height: 10 }} />

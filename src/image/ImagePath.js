@@ -16,6 +16,7 @@ export default Icons = {
     LeftMenuOrderListIcon:          require('./left_meun_order_list_icon.png'),
 
     NotificationIcon:               require('./notification_icon.png'),
+    UserIcon:                       require('./user.png'),
     TranslationIcon:                require('./translation_icon.png'),
     DownArrowIcon:                  require('./down_arrow_icon.png'),
     DownArrowBlackIcon:             require('./down_arrow_black.png'),

@@ -27,7 +27,10 @@ import Notification from './src/pages/nonAuth/notification/Notification'
 import GiftRedemption from './src/pages/nonAuth/giftRedemption/GiftRedemption'
 import AddLefting from './src/pages/nonAuth/addLefting/AddLefting'
 import Gift from './src/pages/nonAuth/gift/Gift'
+import GiftType from './src/pages/nonAuth/gift/GiftType';
+import Vouchers from './src/pages/nonAuth/gift/Vouchers';
 import Order from './src/pages/nonAuth/order/Order'
+import VouchersOrder from './src/pages/nonAuth/order/VouchersOrder';
 import Support from './src/pages/nonAuth/support/Support'
 import ViewSupport from './src/pages/nonAuth/viewSupport/ViewSupport'
 
@@ -68,6 +71,7 @@ import NewEnquiryRequest from './src/pages/nonAuth/order_enquiry/NewEnquiryReque
 
 import MassonList from './src/pages/nonAuth/aadhaarUpload/MassonList'
 import UpdateMassonProfile from './src/pages/nonAuth/aadhaarUpload/UpdateMassonProfile'
+import { DeleteVisibleProvider } from './src/helper/constants/DeleteVisibleContext';
 
 const Stack = createNativeStackNavigator()
 const Drawer = createDrawerNavigator()
@@ -161,10 +165,14 @@ const NonAuthStack = () => (
       component={LiftingHistory}
       options={{ headerShown: false }}
     />
-    <Stack.Screen 
-    name='Order'
-    component={Order}
-    options={{headerShown:false}}/>
+    <Stack.Screen
+      name='Order'
+      component={Order}
+      options={{ headerShown: false }} />
+    {/* <Stack.Screen
+      name='VouchersOrder'
+      component={VouchersOrder}
+      options={{ headerShown: false }} /> */}
     <Stack.Screen
       name='RewardDetails'
       component={RewardDetails}
@@ -184,6 +192,16 @@ const NonAuthStack = () => (
     <Stack.Screen
       name='Gift'
       component={Gift}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name='GiftType'
+      component={GiftType}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name='Vouchers'
+      component={Vouchers}
       options={{ headerShown: false }}
     />
     <Stack.Screen
@@ -315,6 +333,17 @@ const DrawerStack = ({ navigation }) => (
       }}
     />
 
+    {/* <Drawer.Screen
+      name={useTextValue().Voucher_Order_List}
+      component={VouchersOrder}
+      options={{
+        drawerItemStyle: { display: user?.role == 'mason' ? 'flex' : 'none' },
+        drawerIcon: ({ color }) => <View style={{ backgroundColor: '#fff', padding: 8, borderRadius: 5, marginLeft: 5 }}>
+          <Image style={{ width: 16, height: 16, resizeMode: 'contain', tintColor: '#F8373C' }} source={ImagePath.LeftMenuOrderListIcon} />
+        </View>,
+      }}
+    /> */}
+
     <Drawer.Screen
       name={useTextValue().About_Us}
       component={Aboutus}
@@ -385,7 +414,7 @@ const App = () => {
   useEffect(() => {
     // Foreground message listener
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log('📩 Foreground notification:', remoteMessage);
+      //console.log('📩 Foreground notification:', remoteMessage);
 
       Alert.alert(
         remoteMessage.notification?.title || 'Notification',
@@ -397,65 +426,64 @@ const App = () => {
   }, []);
 
   //handle taps---
-//   useEffect(() => {
-//   // When user taps notification while app is in background
-//   const unsubscribe = messaging().onNotificationOpenedApp(remoteMessage => {
-//     console.log(
-//       '📲 Opened from background:',
-//       remoteMessage
-//     );
+  //   useEffect(() => {
+  //   // When user taps notification while app is in background
+  //   const unsubscribe = messaging().onNotificationOpenedApp(remoteMessage => {
+  //     //console.log(
+  //       '📲 Opened from background:',
+  //       remoteMessage
+  //     );
 
-//     // Example navigation
-//     // navigation.navigate('SomeScreen', remoteMessage.data);
-//   });
+  //     // Example navigation
+  //     // navigation.navigate('SomeScreen', remoteMessage.data);
+  //   });
 
-//   return unsubscribe;
-// }, []);
+  //   return unsubscribe;
+  // }, []);
 
-useEffect(() => {
-  messaging()
-    .getInitialNotification()
-    .then(remoteMessage => {
-      if (remoteMessage) {
-        console.log(
-          '🚀 Opened from killed state:',
-          remoteMessage
-        );
+  useEffect(() => {
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          //console.log( '🚀 Opened from killed state:', remoteMessage );
 
-        // Example navigation
-        // navigation.navigate('SomeScreen', remoteMessage.data);
-      }
-    });
-}, []);
+          // Example navigation
+          // navigation.navigate('SomeScreen', remoteMessage.data);
+        }
+      });
+  }, []);
 
 
 
 
   return (
     <>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName='Splash' screenOptions={{
-          headerShown: false,
-          gestureEnabled: false
-        }}>
-          <Stack.Screen
-            name='Splash'
-            component={Splash}
-          />
-          <Stack.Screen
-            name='AuthStack'
-            component={AuthStack}
-          />
-          <Stack.Screen
-            name='DrawerStack'
-            component={DrawerStack}
-          />
-          <Stack.Screen
-            name='VerifiedStack'
-            component={VerifiedStack}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <DeleteVisibleProvider>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName='Splash' screenOptions={{
+            headerShown: false,
+            gestureEnabled: false
+          }}>
+            <Stack.Screen
+              name='Splash'
+              component={Splash}
+            />
+            <Stack.Screen
+              name='AuthStack'
+              component={AuthStack}
+            />
+            <Stack.Screen
+              name='DrawerStack'
+              component={DrawerStack}
+            />
+            <Stack.Screen
+              name='VerifiedStack'
+              component={VerifiedStack}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </DeleteVisibleProvider>
       <Toast config={toastConfig} />
     </>
   )

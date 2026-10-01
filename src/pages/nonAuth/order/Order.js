@@ -1,17 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react'
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  Modal,
-  ActivityIndicator,
-  FlatList,
-  Image,
-  Platform,
-  TextInput,
-  Linking,
-  TouchableWithoutFeedback,
-} from 'react-native'
+import { Text, View, TouchableOpacity, Modal, ActivityIndicator, FlatList, Image, Platform, TextInput, Linking, TouchableWithoutFeedback, } from 'react-native'
 import styles from './OrderStyle'
 import Toolbar from '../../../components/toolbar/Toolbar'
 import { postApiWithHeader, getApiWithHeader } from '../../../helper/http/Api'
@@ -52,8 +40,6 @@ const Order = (props) => {
   const [otherText, setOtherText] = useState('')
 
   const isFocusRef = useRef(false)
-
-  const radioOptions = ['Not Delivered', 'Defective Product', 'Other']
 
   useFocusEffect(
     useCallback(() => {
@@ -166,7 +152,7 @@ const Order = (props) => {
         index: 0,
         routes: [{ name: 'AuthStack' }],
       })
-    } catch (e) {}
+    } catch (e) { }
   }
 
   const close_modal = () => {
@@ -277,311 +263,127 @@ const Order = (props) => {
     const catalogue = item?.catalogue_point
     const tds = item?.tds_point
     const total = item?.point
-
-    // If all 3 are present, show detailed breakdown:
-    // Points - catalogue_point
-    // TDS    - tds_point
-    // Total  - point
-    if (
-      catalogue !== null &&
-      catalogue !== undefined &&
-      tds !== null &&
-      tds !== undefined &&
-      total !== null &&
-      total !== undefined
-    ) {
+    if (catalogue !== null && catalogue !== undefined && tds !== null && tds !== undefined && total !== null && total !== undefined) {
       return (
         `Points - ${convertForShowData(catalogue)}\n` +
         `TDS - ${convertForShowData(tds)}\n` +
         `Total - ${convertForShowData(total)}`
       )
     }
-
-    // Fallback: show the original point only
     return convertForShowData(item?.point)
   }
 
   const renderItem = useCallback(
     ({ item }) => {
       if (!item) return null
-
       return (
-        <View
-          style={{
-            width: '100%',
-            borderWidth: 1,
-            borderColor: '#FFDFE1',
-            paddingHorizontal: 5,
-            paddingVertical: 5,
-            borderRadius: 5,
-            marginBottom: 10,
-            backgroundColor: 'white',
-          }}
-        >
-          <View
-            style={{
-              flexDirection: 'row',
-              minHeight: 40,
-              padding: 5,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+        <View style={{ width: '100%', borderWidth: 1, borderColor: '#FFDFE1', paddingHorizontal: 5, paddingVertical: 5, borderRadius: 5, marginBottom: 10, backgroundColor: 'white', }} >
+          <View style={{ flexDirection: 'row', minHeight: 40, padding: 5, justifyContent: 'center', alignItems: 'center', }} >
             <View style={{ flex: 1, justifyContent: 'center' }}>
-              <Text style={{ color: 'gray', fontSize: 15 }}>
-                {convertForShowData(textValue.Order_Id)} :
-              </Text>
+              <Text style={{ color: 'gray', fontSize: 15 }}> {convertForShowData(textValue.Order_Id)} : </Text>
             </View>
             <View style={{ width: 1, height: '65%', backgroundColor: '#FFD5D6' }} />
             <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 10 }}>
-              <Text style={{ color: 'black', fontSize: 15 }}>
-                {convertForShowData(item.order_id)}
-              </Text>
+              <Text style={{ color: 'black', fontSize: 15 }}> {convertForShowData(item.order_id)} </Text>
             </View>
           </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              minHeight: 40,
-              padding: 5,
-              backgroundColor: '#FFF0F1',
-              borderRadius: 5,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 6,
-            }}
-          >
+          <View style={{ flexDirection: 'row', minHeight: 40, padding: 5, backgroundColor: '#FFF0F1', borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginTop: 6, }} >
             <View style={{ flex: 1, justifyContent: 'center' }}>
-              <Text style={{ color: 'gray', fontSize: 15 }}>
-                {convertForShowData(textValue.Date)} :
-              </Text>
+              <Text style={{ color: 'gray', fontSize: 15 }}> {convertForShowData(textValue.Date)} : </Text>
             </View>
             <View style={{ width: 1, height: '65%', backgroundColor: '#FFD5D6' }} />
             <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 10 }}>
-              <Text style={{ color: 'black', fontSize: 15 }}>
-                {convertForShowData(item.reward_date)}
-              </Text>
+              <Text style={{ color: 'black', fontSize: 15 }}> {convertForShowData(item.reward_date)} </Text>
             </View>
           </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              minHeight: 40,
-              padding: 5,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 6,
-            }}
-          >
+          <View style={{ flexDirection: 'row', minHeight: 40, padding: 5, justifyContent: 'center', alignItems: 'center', marginTop: 6, }} >
             <View style={{ flex: 1, justifyContent: 'center' }}>
-              <Text style={{ color: 'gray', fontSize: 15 }}>
-                {convertForShowData(textValue.Description)} :
-              </Text>
+              <Text style={{ color: 'gray', fontSize: 15 }}> {convertForShowData(textValue.Description)} : </Text>
             </View>
             <View style={{ width: 1, height: '65%', backgroundColor: '#FFD5D6' }} />
             <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 10 }}>
-              <Text style={{ color: 'black', fontSize: 15 }}>
-                {convertForShowData(item.description)}
-              </Text>
+              <Text style={{ color: 'black', fontSize: 15 }}> {convertForShowData(item.description)} </Text>
             </View>
           </View>
 
           {/* 🔹 UPDATED POINTS ROW WITH ROW-WISE BREAKDOWN */}
-          <View
-            style={{
-              flexDirection: 'row',
-              minHeight: 40,
-              padding: 5,
-              backgroundColor: '#FFF0F1',
-              borderRadius: 5,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 6,
-            }}
-          >
+          <View style={{ flexDirection: 'row', minHeight: 40, padding: 5, backgroundColor: '#FFF0F1', borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginTop: 6, }} >
             <View style={{ flex: 1, justifyContent: 'center' }}>
-              <Text style={{ color: 'gray', fontSize: 15 }}>
-                {convertForShowData(textValue.Points)} :
-              </Text>
+              <Text style={{ color: 'gray', fontSize: 15 }}> {convertForShowData(textValue.Points)} : </Text>
             </View>
             <View style={{ width: 1, height: '65%', backgroundColor: '#FFD5D6' }} />
             <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 10 }}>
-              <Text style={{ color: 'black', fontSize: 15 }}>
-                {buildPointsBlock(item)}
-              </Text>
+              <Text style={{ color: 'black', fontSize: 15 }}> {buildPointsBlock(item)} </Text>
             </View>
           </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              minHeight: 40,
-              padding: 5,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 6,
-            }}
-          >
+          <View style={{ flexDirection: 'row', minHeight: 40, padding: 5, justifyContent: 'center', alignItems: 'center', marginTop: 6, }} >
             <View style={{ flex: 1, justifyContent: 'center' }}>
-              <Text style={{ color: 'gray', fontSize: 15 }}>
-                {convertForShowData(textValue.Delivery_Status)} :
-              </Text>
+              <Text style={{ color: 'gray', fontSize: 15 }}> {convertForShowData(textValue.Delivery_Status)} : </Text>
             </View>
             <View style={{ width: 1, height: '65%', backgroundColor: '#FFD5D6' }} />
             <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 10 }}>
               <Text style={{ color: 'black', fontSize: 15 }}>{item.delivery_status_value}</Text>
             </View>
           </View>
-          {item?.remarks && 
-          <View
-            style={{
-              flexDirection: 'row',
-              minHeight: 40,
-              padding: 5,
-              backgroundColor: '#FFF0F1',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 6,
-            }}
-          >
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-              <Text style={{ color: 'gray', fontSize: 15 }}>
-                {convertForShowData(textValue.Remarks)} :
-              </Text>
-            </View>
-            <View style={{ width: 1, height: '65%', backgroundColor: '#FFD5D6' }} />
-            <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 10 }}>
-              <Text style={{ color: 'black', fontSize: 15 }}>{item.remarks}</Text>
-            </View>
-          </View>}
-
-          {item.delivery_date ? (
-            <View
-              style={{
-                flexDirection: 'row',
-                minHeight: 40,
-                padding: 5,
-                backgroundColor: '#FFF0F1',
-                borderRadius: 5,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginTop: 6,
-              }}
-            >
+          {item?.remarks &&
+            <View style={{ flexDirection: 'row', minHeight: 40, padding: 5, backgroundColor: '#FFF0F1', justifyContent: 'center', alignItems: 'center', marginTop: 6, }} >
               <View style={{ flex: 1, justifyContent: 'center' }}>
-                <Text style={{ color: 'gray', fontSize: 15 }}>
-                  {convertForShowData(textValue.Delivery_Date)} :
-                </Text>
+                <Text style={{ color: 'gray', fontSize: 15 }}> {convertForShowData(textValue.Remarks)} : </Text>
               </View>
               <View style={{ width: 1, height: '65%', backgroundColor: '#FFD5D6' }} />
               <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 10 }}>
-                <Text style={{ color: 'black', fontSize: 15 }}>
-                  {convertForShowData(moment(item?.delivery_date).format('DD-MM-YYYY'))}
-                </Text>
+                <Text style={{ color: 'black', fontSize: 15 }}>{item.remarks}</Text>
               </View>
+            </View>}
+
+          {item.delivery_date ? <View style={{ flexDirection: 'row', minHeight: 40, padding: 5, backgroundColor: '#FFF0F1', borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginTop: 6, }} >
+            <View style={{ flex: 1, justifyContent: 'center' }}>
+              <Text style={{ color: 'gray', fontSize: 15 }}> {convertForShowData(textValue.Delivery_Date)} : </Text>
             </View>
-          ) : null}
+            <View style={{ width: 1, height: '65%', backgroundColor: '#FFD5D6' }} />
+            <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 10 }}>
+              <Text style={{ color: 'black', fontSize: 15 }}> {convertForShowData(moment(item?.delivery_date).format('DD-MM-YYYY'))} </Text>
+            </View>
+          </View> : null}
 
-          <View
-            style={{ flexDirection: 'column', justifyContent: 'space-between', marginTop: 10 }}
-          >
-            {item?.isConfirmEnabled ? (
-              <TouchableOpacity
-                onPress={() => {
-                  setOrder_id(item.order_id)
-                  setModalConfirmPopup(true)
-                }}
-                style={{
-                  flex: 1,
-                  backgroundColor: '#ee1d23',
-                  paddingVertical: 10,
-                  borderRadius: 5,
-                  elevation: 5,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: 8,
-                }}
-              >
-                <Text style={{ color: 'white', fontSize: 14, fontWeight: '600' }}>
-                  Acknowledge Delivery
-                </Text>
-              </TouchableOpacity>
-            ) : null}
-            {item?.isConfirmEnabled ? (
-              <TouchableOpacity
-                onPress={() => {
-                  setOrder_id(item.order_id)
-                  setModalNotDeliveredmPopup(true)
-                }}
-                style={{
-                  flex: 1,
-                  backgroundColor: '#fce3e5',
-                  paddingVertical: 10,
-                  borderRadius: 5,
-                  elevation: 5,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: 8,
-                }}
-              >
-                <Text style={{ color: '#ee1d23', fontSize: 14, fontWeight: '600' }}>
-                  Not Delivered
-                </Text>
-              </TouchableOpacity>
-            ) : null}
+          <View style={{ flexDirection: 'column', justifyContent: 'space-between', marginTop: 10 }} >
+            {item?.isConfirmEnabled ? <TouchableOpacity onPress={() => {
+              setOrder_id(item.order_id)
+              setModalConfirmPopup(true)
+            }} style={{ flex: 1, backgroundColor: '#ee1d23', paddingVertical: 10, borderRadius: 5, elevation: 5, alignItems: 'center', justifyContent: 'center', marginBottom: 8, }} >
+              <Text style={{ color: 'white', fontSize: 14, fontWeight: '600' }}> Acknowledge Delivery </Text>
+            </TouchableOpacity> : null}
+            {item?.isConfirmEnabled ? <TouchableOpacity onPress={() => {
+              setOrder_id(item.order_id)
+              setModalNotDeliveredmPopup(true)
+            }} style={{ flex: 1, backgroundColor: '#fce3e5', paddingVertical: 10, borderRadius: 5, elevation: 5, alignItems: 'center', justifyContent: 'center', marginBottom: 8, }} >
+              <Text style={{ color: '#ee1d23', fontSize: 14, fontWeight: '600' }}> Not Delivered </Text>
+            </TouchableOpacity> : null}
 
-            {item?.order_tracking_url ? (
-              <TouchableOpacity
-                onPress={async () => {
-                  const url = item?.order_tracking_url.trim()
-                  if (!url) {
-                    showToast('error', 'No tracking URL provided')
-                    return
-                  }
-                  try {
-                      await Linking.openURL(url)
-                  } catch (e) {
-                    showToast('error', "Can't open this URL: ")
-                  }
-                }}
-                style={{
-                  flex: 1,
-                  backgroundColor: '#ee1d23',
-                  paddingVertical: 10,
-                  borderRadius: 5,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: 8,
-                }}
-              >
-                <Text style={{ color: 'white', fontSize: 14, fontWeight: '600' }}>
-                  Track Order
-                </Text>
-              </TouchableOpacity>
-            ) : null}
+            {item?.order_tracking_url ? <TouchableOpacity onPress={async () => {
+              const url = item?.order_tracking_url.trim()
+              if (!url) {
+                showToast('error', 'No tracking URL provided')
+                return
+              }
+              try {
+                await Linking.openURL(url)
+              } catch (e) {
+                showToast('error', "Can't open this URL: ")
+              }
+            }} style={{ flex: 1, backgroundColor: '#ee1d23', paddingVertical: 10, borderRadius: 5, alignItems: 'center', justifyContent: 'center', marginBottom: 8, }} >
+              <Text style={{ color: 'white', fontSize: 14, fontWeight: '600' }}> Track Order </Text>
+            </TouchableOpacity> : null}
 
-            {item?.is_feedback_button_active ? (
-              <TouchableOpacity
-                onPress={() => {
-                  setModalFeedbackPopup(true)
-                  setOrder_id(item.order_id)
-                }}
-                style={{
-                  flex: 1,
-                  backgroundColor: '#ffd4d7',
-                  paddingVertical: 10,
-                  borderRadius: 5,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Text style={{ color: '#ee1d23', fontSize: 14, fontWeight: '600' }}>
-                  Feedback / Complaint
-                </Text>
-              </TouchableOpacity>
-            ) : null}
+            {item?.is_feedback_button_active ? <TouchableOpacity onPress={() => {
+              setModalFeedbackPopup(true)
+              setOrder_id(item.order_id)
+            }} style={{ flex: 1, backgroundColor: '#ffd4d7', paddingVertical: 10, borderRadius: 5, alignItems: 'center', justifyContent: 'center', }} >
+              <Text style={{ color: '#ee1d23', fontSize: 14, fontWeight: '600' }}> Feedback / Complaint </Text>
+            </TouchableOpacity> : null}
           </View>
         </View>
       )
@@ -592,10 +394,6 @@ const Order = (props) => {
   // BACK button handler: deterministic and safe
   const handleBackPress = () => {
     try {
-      if (props?.navigation?.getState) {
-        //console.log('Navigation state on back press:', props.navigation.getState())
-      }
-
       if (props?.navigation?.canGoBack && props.navigation.canGoBack()) {
         props.navigation.goBack()
         return
@@ -617,56 +415,17 @@ const Order = (props) => {
 
   return (
     <SafeView backgroundColor={Colors.white} bar={false} statusbarColor={Colors.red}>
-      <View
-        style={{
-          width: '100%',
-          height: '100%',
-          flexDirection: 'column',
-          backgroundColor: '#FFF',
-        }}
-      >
-        <View
-          style={{
-            width: '100%',
-            height: 100,
-            borderBottomLeftRadius: 25,
-            borderBottomRightRadius: 25,
-            backgroundColor: '#EE1D23',
-          }}
-        />
+      <View style={{ width: '100%', height: '100%', flexDirection: 'column', backgroundColor: '#FFF', }} >
+        <View style={{ width: '100%', height: 100, borderBottomLeftRadius: 25, borderBottomRightRadius: 25, backgroundColor: '#EE1D23', }} />
       </View>
 
-      <View
-        style={{
-          width: '100%',
-          height: '100%',
-          position: 'absolute',
-          flexDirection: 'column',
-        }}
-      >
+      <View style={{ width: '100%', height: '100%', position: 'absolute', flexDirection: 'column', }} >
         <View style={{ height: Platform.OS == 'ios' ? 25 : 0 }} />
         <View style={{ width: '100%', height: 70 }}>
-          <View
-            style={{
-              width: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100%',
-            }}
-          >
-            <Text style={styles._upperView._txt}>
-              {convertForShowData(textValue.ORDER_LIST)}
-            </Text>
+          <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center', height: '100%', }} >
+            <Text style={styles._upperView._txt}> {convertForShowData(textValue.ORDER_LIST)} </Text>
           </View>
-          <View
-            style={{
-              height: '100%',
-              paddingHorizontal: 15,
-              flexDirection: 'column',
-              justifyContent: 'center',
-              position: 'absolute',
-            }}
-          >
+          <View style={{ height: '100%', paddingHorizontal: 15, flexDirection: 'column', justifyContent: 'center', position: 'absolute', }} >
             <TouchableOpacity onPress={handleBackPress}>
               <Image style={styles._upperView._back._img} source={Icons.back} />
             </TouchableOpacity>
@@ -674,17 +433,7 @@ const Order = (props) => {
         </View>
 
         <View style={{ width: '100%', flex: 1, paddingHorizontal: 30 }}>
-          <View
-            style={{
-              width: '100%',
-              height: '100%',
-              backgroundColor: '#FFF',
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
-              paddingVertical: 15,
-              paddingHorizontal: 5,
-            }}
-          >
+          <View style={{ width: '100%', height: '100%', backgroundColor: '#FFF', borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingVertical: 15, paddingHorizontal: 5, }} >
             <FlatList
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
@@ -695,11 +444,9 @@ const Order = (props) => {
               keyExtractor={keyExtractor}
               contentContainerStyle={{ paddingBottom: 40 }}
               ListEmptyComponent={() =>
-                !flatlistLoader ? (
-                  <View style={{ alignItems: 'center', marginTop: 30 }}>
-                    <Text style={{ color: '#666' }}>No orders found</Text>
-                  </View>
-                ) : null
+                !flatlistLoader ? <View style={{ alignItems: 'center', marginTop: 30 }}>
+                  <Text style={{ color: '#666' }}>No orders found</Text>
+                </View> : null
               }
             />
           </View>
@@ -708,96 +455,40 @@ const Order = (props) => {
 
       <View style={styles._bgColor}>
         <View style={styles._upperView}>
-          <Text style={styles._upperView._txt}>
-            {convertForShowData(textValue.ORDER_LIST)}
-          </Text>
-          <Text
-            style={{
-              color: '#fff',
-              position: 'absolute',
-              fontSize: 20,
-              fontWeight: '500',
-            }}
-          >
-            {convertForShowData(textValue.ORDER_LIST)}
-          </Text>
+          <Text style={styles._upperView._txt}> {convertForShowData(textValue.ORDER_LIST)} </Text>
+          <Text style={{ color: '#fff', position: 'absolute', fontSize: 20, fontWeight: '500', }} > {convertForShowData(textValue.ORDER_LIST)} </Text>
           <Toolbar obj={{ title: '', icon: '', language: 'notshow' }} />
         </View>
 
         <View style={styles._lowerView} />
       </View>
 
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisibility}
-        onRequestClose={() => setModalVisibility(false)}
-      >
+      <Modal animationType="fade" transparent={true} visible={modalVisibility} onRequestClose={() => setModalVisibility(false)} >
         {modalSupport ? <Support obj={{ item: orderInfo }} sendData={close_modal} /> : null}
-        {modalViewSupport ? (
-          <ViewSupport obj={{ item: orderInfo }} sendData={close_modal} />
-        ) : null}
+        {modalViewSupport ? <ViewSupport obj={{ item: orderInfo }} sendData={close_modal} /> : null}
       </Modal>
 
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalNotDeliveredPopup}
-        onRequestClose={() => setModalNotDeliveredmPopup(false)}
-      >
+      <Modal animationType="fade" transparent={true} visible={modalNotDeliveredPopup} onRequestClose={() => setModalNotDeliveredmPopup(false)} >
         <TouchableWithoutFeedback onPress={() => setModalNotDeliveredmPopup(false)}>
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: '#0009',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+          <View style={{ flex: 1, backgroundColor: '#0009', alignItems: 'center', justifyContent: 'center', }} >
             <TouchableWithoutFeedback>
-              <View
-                style={{
-                  width: '80%',
-                  padding: 20,
-                  backgroundColor: '#FFF',
-                  borderRadius: 10,
-                }}
-              >
-                <Text
-                  style={{
-                    color: '#000',
-                    fontSize: 16,
-                    marginBottom: 10,
-                    fontWeight: '600',
-                  }}
-                >
-                  Confirm
-                </Text>
+              <View style={{ width: '80%', padding: 20, backgroundColor: '#FFF', borderRadius: 10, }} >
+                <Text style={{ color: '#000', fontSize: 16, marginBottom: 10, fontWeight: '600', }} > Confirm </Text>
 
-                <Text style={{ color: '#555', fontSize: 14 }}>
-                  Are you sure that <Text style={{ fontWeight: 'bold' }}>{order_id}</Text> is
-                  <Text style={{ fontWeight: 'bold', color: 'red' }}> not delivered </Text> to you?
-                </Text>
+                <Text style={{ color: '#555', fontSize: 14 }}> Are you sure that <Text style={{ fontWeight: 'bold' }}>{order_id}</Text> is <Text style={{ fontWeight: 'bold', color: 'red' }}> not delivered </Text> to you? </Text>
 
                 <View style={{ height: 10 }} />
 
                 <View style={{ width: '100%', flexDirection: 'row-reverse' }}>
                   <View style={{ width: 30 }} />
-                  <TouchableOpacity
-                    onPress={() => {
-                      requestForConfirmOrderDelivered(order_id, 0)
-                      setModalNotDeliveredmPopup(false)
-                    }}
-                  >
+                  <TouchableOpacity onPress={() => {
+                    requestForConfirmOrderDelivered(order_id, 0)
+                    setModalNotDeliveredmPopup(false)
+                  }} >
                     <Text style={{ color: '#060', fontSize: 14 }}>Yes</Text>
                   </TouchableOpacity>
-                   <View style={{ width: 30 }} />
-                  <TouchableOpacity
-                    onPress={() => {
-                      //requestForConfirmOrderDelivered(order_id, 0)
-                      setModalNotDeliveredmPopup(false)
-                    }}
-                  >
+                  <View style={{ width: 30 }} />
+                  <TouchableOpacity onPress={() => { setModalNotDeliveredmPopup(false) }} >
                     <Text style={{ color: 'red', fontSize: 14 }}>Cancel</Text>
                   </TouchableOpacity>
                 </View>
@@ -807,65 +498,27 @@ const Order = (props) => {
         </TouchableWithoutFeedback>
       </Modal>
 
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalConfirmPopup}
-        onRequestClose={() => setModalConfirmPopup(false)}
-      >
+      <Modal animationType="fade" transparent={true} visible={modalConfirmPopup} onRequestClose={() => setModalConfirmPopup(false)} >
         <TouchableWithoutFeedback onPress={() => setModalConfirmPopup(false)}>
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: '#0009',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+          <View style={{ flex: 1, backgroundColor: '#0009', alignItems: 'center', justifyContent: 'center', }} >
             <TouchableWithoutFeedback>
-              <View
-                style={{
-                  width: '80%',
-                  padding: 20,
-                  backgroundColor: '#FFF',
-                  borderRadius: 10,
-                }}
-              >
-                <Text
-                  style={{
-                    color: '#000',
-                    fontSize: 16,
-                    marginBottom: 10,
-                    fontWeight: '600',
-                  }}
-                >
-                  Confirm
-                </Text>
+              <View style={{ width: '80%', padding: 20, backgroundColor: '#FFF', borderRadius: 10, }} >
+                <Text style={{ color: '#000', fontSize: 16, marginBottom: 10, fontWeight: '600', }} > Confirm </Text>
 
-                <Text style={{ color: '#555', fontSize: 14 }}>
-                  Are you sure that <Text style={{ fontWeight: 'bold' }}>{order_id}</Text> is
-                  <Text style={{ fontWeight: 'bold', color: '#060' }}> delivered </Text> to you?
-                </Text>
+                <Text style={{ color: '#555', fontSize: 14 }}> Are you sure that <Text style={{ fontWeight: 'bold' }}>{order_id}</Text> is <Text style={{ fontWeight: 'bold', color: '#060' }}> delivered </Text> to you? </Text>
 
                 <View style={{ height: 10 }} />
 
                 <View style={{ width: '100%', flexDirection: 'row-reverse' }}>
                   <View style={{ width: 30 }} />
-                  <TouchableOpacity
-                    onPress={() => {
-                      requestForConfirmOrderDelivered(order_id, 1)
-                      setModalConfirmPopup(false)
-                    }}
-                  >
+                  <TouchableOpacity onPress={() => {
+                    requestForConfirmOrderDelivered(order_id, 1)
+                    setModalConfirmPopup(false)
+                  }} >
                     <Text style={{ color: '#060', fontSize: 14 }}>Yes</Text>
                   </TouchableOpacity>
-                   <View style={{ width: 30 }} />
-                  <TouchableOpacity
-                    onPress={() => {
-                      //requestForConfirmOrderDelivered(order_id, 1)
-                      setModalConfirmPopup(false)
-                    }}
-                  >
+                  <View style={{ width: 30 }} />
+                  <TouchableOpacity onPress={() => { setModalConfirmPopup(false) }} >
                     <Text style={{ color: 'red', fontSize: 14 }}>Cancel</Text>
                   </TouchableOpacity>
                 </View>
@@ -875,50 +528,12 @@ const Order = (props) => {
         </TouchableWithoutFeedback>
       </Modal>
 
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalFeedbackPopup}
-        onRequestClose={() => setModalFeedbackPopup(false)}
-      >
-        <View
-          style={{
-            width: '100%',
-            height: '100%',
-            backgroundColor: '#0009',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <View
-            style={{
-              width: '85%',
-              padding: 20,
-              backgroundColor: '#FFF',
-              borderRadius: 10,
-            }}
-          >
-            <Text
-              style={{
-                color: '#000',
-                fontSize: 18,
-                fontWeight: '600',
-                marginBottom: 10,
-              }}
-            >
-              Feedback / Complaint
-            </Text>
+      <Modal animationType="fade" transparent={true} visible={modalFeedbackPopup} onRequestClose={() => setModalFeedbackPopup(false)} >
+        <View style={{ width: '100%', height: '100%', backgroundColor: '#0009', alignItems: 'center', justifyContent: 'center', }} >
+          <View style={{ width: '85%', padding: 20, backgroundColor: '#FFF', borderRadius: 10, }} >
+            <Text style={{ color: '#000', fontSize: 18, fontWeight: '600', marginBottom: 10, }} > Feedback / Complaint </Text>
 
-            <Text
-              style={{
-                color: '#555',
-                fontSize: 14,
-                marginBottom: 10,
-              }}
-            >
-              Please provide your feedback for order{' '}
-              <Text style={{ fontWeight: 'bold' }}>{order_id}</Text>:
-            </Text>
+            <Text style={{ color: '#555', fontSize: 14, marginBottom: 10, }} > Please provide your feedback for order{' '} <Text style={{ fontWeight: 'bold' }}>{order_id}</Text>: </Text>
 
             <TextInput
               value={otherText}
@@ -927,52 +542,20 @@ const Order = (props) => {
               placeholderTextColor="#999"
               multiline={true}
               numberOfLines={4}
-              style={{
-                borderWidth: 1,
-                borderColor: '#CCC',
-                borderRadius: 8,
-                padding: 12,
-                minHeight: 100,
-                textAlignVertical: 'top',
-                color: '#000',
-              }}
-            />
+              style={{ borderWidth: 1, borderColor: '#CCC', borderRadius: 8, padding: 12, minHeight: 100, textAlignVertical: 'top', color: '#000', }} />
 
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                marginTop: 18,
-              }}
-            >
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 18, }} >
               <TouchableOpacity
                 onPress={() => {
                   setModalFeedbackPopup(false)
                   setOtherText('')
-                }}
-                style={{ marginRight: 16, justifyContent: 'center' }}
-              >
+                }} style={{ marginRight: 16, justifyContent: 'center' }} >
                 <Text style={{ color: Colors.red, fontSize: 15 }}>Cancel</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={handleSubmit}
-                disabled={!otherText.trim() || submittingFeedback}
-                style={{
-                  backgroundColor:
-                    !otherText.trim() || submittingFeedback ? '#f2a6a8' : Colors.red,
-                  paddingVertical: 10,
-                  paddingHorizontal: 18,
-                  borderRadius: 6,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                {submittingFeedback ? (
-                  <ActivityIndicator size="small" color="#fff" />
-                ) : (
-                  <Text style={{ color: '#FFF', fontSize: 15 }}>Submit</Text>
-                )}
+              <TouchableOpacity onPress={handleSubmit} disabled={!otherText.trim() || submittingFeedback}
+                style={{ backgroundColor: !otherText.trim() || submittingFeedback ? '#f2a6a8' : Colors.red, paddingVertical: 10, paddingHorizontal: 18, borderRadius: 6, justifyContent: 'center', alignItems: 'center', }} >
+                {submittingFeedback ? <ActivityIndicator size="small" color="#fff" /> : <Text style={{ color: '#FFF', fontSize: 15 }}>Submit</Text>}
               </TouchableOpacity>
             </View>
           </View>

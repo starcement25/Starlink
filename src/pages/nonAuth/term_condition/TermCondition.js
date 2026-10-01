@@ -85,7 +85,7 @@ const TermCondition = (props) => {
                         <Text style={{ color: '#fff', position: 'absolute', fontSize: 20, fontWeight: '500' }}>{convertForShowData(textValue.TERMS_CONDITIONS)}</Text>
                     </View>
                     <View style={{ height: '100%', paddingHorizontal: 15, flexDirection: 'column', justifyContent: 'center', position: 'absolute' }}>
-                        <TouchableOpacity onPress={() =>{
+                        <TouchableOpacity onPress={() => {
                             setTimeout(() => {
                                 props.navigation.goBack()
                             }, 500)
@@ -115,11 +115,7 @@ const TermCondition = (props) => {
 }
 
 const richTextStyles = StyleSheet.create({
-    p: {
-        marginTop: 0,
-        marginBottom: -20,
-        color: '#000000'
-    }
+    p: { marginTop: 0, marginBottom: -20, color: '#000000' }
 })
 
 export default TermCondition

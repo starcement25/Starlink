@@ -14,7 +14,7 @@ import store from './src/redux/store/store'
 // AppRegistry.registerComponent(appName, () => App)
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
-  console.log('📦 Background message:', remoteMessage);
+  //console.log('📦 Background message:', remoteMessage);
 });
 
 const RNRedux = () => (

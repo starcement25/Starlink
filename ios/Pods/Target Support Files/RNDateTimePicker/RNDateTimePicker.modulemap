@@ -1,4 +1,4 @@
-framework module RNDateTimePicker {
+module RNDateTimePicker {
   umbrella header "RNDateTimePicker-umbrella.h"
 
   export *

@@ -1,4 +1,4 @@
-framework module react_native_netinfo {
+module react_native_netinfo {
   umbrella header "react-native-netinfo-umbrella.h"
 
   export *

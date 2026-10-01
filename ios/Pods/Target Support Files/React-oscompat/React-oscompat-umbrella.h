@@ -10,7 +10,7 @@
 #endif
 #endif
 
-#import "OSCompat.h"
+#import "oscompat/OSCompat.h"
 
 FOUNDATION_EXPORT double oscompatVersionNumber;
 FOUNDATION_EXPORT const unsigned char oscompatVersionString[];

@@ -18,14 +18,14 @@ const Splash = ({ navigation }) => {
   let hasNavigated = false;
 
   const safeNavigate = (route) => {
-  if (hasNavigated) return;
-  hasNavigated = true;
+    if (hasNavigated) return;
+    hasNavigated = true;
 
-  navigation.reset({
-    index: 0,
-    routes: [{ name: route }],
-  });
-};
+    navigation.reset({
+      index: 0,
+      routes: [{ name: route }],
+    });
+  };
 
   // Run once on mount
   useEffect(() => {
@@ -65,12 +65,12 @@ const Splash = ({ navigation }) => {
     try {
       const token = await messaging().getToken();
       //console.log('FCM Token:', token);
-       try {
-    await AsyncStorage.setItem('firebase_token', token);
-    //console.log('Token saved');
-  } catch (e) {
-    //console.log('Save error:', e);
-  }
+      try {
+        await AsyncStorage.setItem('firebase_token', token);
+        //console.log('Token saved');
+      } catch (e) {
+        //console.log('Save error:', e);
+      }
       // Send this token to your backend if needed
     } catch (e) {
       //console.log('[Splash] getFCMToken error:', e);
@@ -78,18 +78,18 @@ const Splash = ({ navigation }) => {
   }
 
   const fadeIn = () => {
-  setTimeout(() => {
-    app_version_check();
-  }, 1500);
+    setTimeout(() => {
+      app_version_check();
+    }, 1500);
 
-  setTimeout(() => {
-    getData();
-  }, 3000);
+    setTimeout(() => {
+      getData();
+    }, 3000);
 
-  setTimeout(() => {
-    safeNavigate('AuthStack');
-  }, 8000);
-};
+    setTimeout(() => {
+      safeNavigate('AuthStack');
+    }, 8000);
+  };
 
   const app_version_check = async () => {
     try {
@@ -156,8 +156,8 @@ const Splash = ({ navigation }) => {
     //console.log('[Splash] calling app_registration_link_visible');
     getApi(
       constants.app_registration_link_visible +
-        '?preferred_app_lang=' +
-        selectedLanguageIfSafe(),
+      '?preferred_app_lang=' +
+      selectedLanguageIfSafe(),
     )
       .then(response => {
         //console.log( '[Splash] app_registration_link_visible response:', response.data, );
@@ -188,46 +188,33 @@ const Splash = ({ navigation }) => {
   };
 
   const getData = async () => {
-  try {
-    const language_select = await AsyncStorage.getItem('language_select');
-    DataStore.language = language_select || 'English';
+    try {
+      const language_select = await AsyncStorage.getItem('language_select');
+      DataStore.language = language_select || 'English';
 
-    const value = await AsyncStorage.getItem('user_info');
+      const value = await AsyncStorage.getItem('user_info');
 
-    if (value) {
-      const data = JSON.parse(value);
+      if (value) {
+        const data = JSON.parse(value);
 
-      dispatch(
-        updateData({ role: data?.data?.role == 2 ? 'mason' : 'te' }),
-      );
+        dispatch(
+          updateData({ role: data?.data?.role == 2 ? 'mason' : 'te' }),
+        );
 
-      safeNavigate('DrawerStack');
-    } else {
+        safeNavigate('DrawerStack');
+      } else {
+        safeNavigate('AuthStack');
+      }
+    } catch (e) {
       safeNavigate('AuthStack');
     }
-  } catch (e) {
-    safeNavigate('AuthStack');
-  }
-};
+  };
 
   return (
     <View style={{ height: '100%', width: '100%' }}>
-      <Image
-        style={{ height: '100%', width: '100%', resizeMode: 'stretch' }}
-        source={ImagePath.SplashBackground}
-      />
-      <View
-        style={{
-          height: '100%',
-          width: '100%',
-          position: 'absolute',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Image
-          style={{ height: '60%', width: '60%', resizeMode: 'contain' }}
-          source={ImagePath.LogoAndTag}
-        />
+      <Image style={{ height: '100%', width: '100%', resizeMode: 'stretch' }} source={ImagePath.SplashBackground} />
+      <View style={{ height: '100%', width: '100%', position: 'absolute', alignItems: 'center', justifyContent: 'center', }}>
+        <Image style={{ height: '60%', width: '60%', resizeMode: 'contain' }} source={ImagePath.LogoAndTag} />
       </View>
     </View>
   );

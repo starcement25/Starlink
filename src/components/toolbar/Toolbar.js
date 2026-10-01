@@ -23,6 +23,11 @@ export default function Toolbar(props) {
             </TouchableOpacity> : <TouchableOpacity style={styles.container._back} onPress={() => navigation.goBack()}>
                 <Image style={styles.container._back._img} source={Icons.back} />
             </TouchableOpacity>}
+            {props.obj.language == 'show' ? <TouchableOpacity style={styles.container.bellIcon1} onPress={() => { props.openBDEPopup() }} activeOpacity={0.6}>
+                <View style={{width: 35, height: 35,backgroundColor:'#F52F38',borderRadius:20,alignItems:'center',justifyContent:'center'}}>
+                    <Image source={ImagePath.UserIcon} style={{ width: 20, height: 20,tintColor:'#FFF' }} />
+                </View>
+            </TouchableOpacity> : null}
         </View>
     )
 }
@@ -53,6 +58,14 @@ const styles = StyleSheet.create({
             width: 50,
             justifyContent: 'center',
             alignItems: 'center',
+        },
+        bellIcon1: {
+            position: 'absolute',
+            right: 70,
+            height: 50,
+            width: 50,
+            justifyContent: 'center',
+            alignItems: 'center'
         },
         _back: {
             position: 'absolute',

@@ -79,7 +79,7 @@ const Login = (props) => {
       //console.log('[Login] sendOtp payload:', { phone: convertForUploadData(phone), otp_purpose: 'login_mason_te', preferred_app_lang: selectedLanguage(), })
 
       const response = await postApiJSON(constants.send_otp, payload)
-      //console.log('[Login] sendOtp response:', response?.data)
+      console.log('[Login] sendOtp response:', response?.data)
 
       setLoading(false)
 
@@ -110,7 +110,7 @@ const Login = (props) => {
 
   const showToast = (type, title, msg) => {
     Toast.show({
-      type: type,              
+      type: type,
       text1: title,
       text2: msg,
       text2NumberOfLines: 2,

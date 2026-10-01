@@ -1,4 +1,4 @@
-framework module BVLinearGradient {
+module BVLinearGradient {
   umbrella header "BVLinearGradient-umbrella.h"
 
   export *

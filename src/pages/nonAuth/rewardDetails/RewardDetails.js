@@ -240,7 +240,7 @@ const RewardDetails = (props) => {
                         setFlatListLoader(false)
                     }
                 } catch (err) {
-                    
+
                     setLoading(false)
                     setFlatListLoader(false)
                 }
@@ -296,9 +296,11 @@ const RewardDetails = (props) => {
                     let data = response.data.data
                     let masonList = []
                     for (var i = 0; i < data.length; i++) {
+                        console.log(JSON.stringify(data[i]));
+
                         let obj = {
                             // label: convertForShowData(data[i].mason_name) + ' ' + convertForShowData(data[i].mason_phone),
-                            label: convertForShowData(data[i].mason_name),
+                            label: convertForShowData(data[i].mason_name + " (+91-" + data[i].mason_phone + ")"),
                             value: data[i].mason_id
                         }
                         masonList.push(obj)
@@ -391,7 +393,7 @@ const RewardDetails = (props) => {
                 }
             })
             .catch(err => {
-                
+
                 setLoading(false)
                 // showToast('error', messageList.t4)
                 setFlatListLoader(false)
@@ -583,7 +585,7 @@ const RewardDetails = (props) => {
                         <Text style={styles._upperView._txt}>{convertForShowData(textValue.REWARD_DETAILS)}</Text>
                     </View>
                     <View style={{ height: '100%', paddingHorizontal: 15, flexDirection: 'column', justifyContent: 'center', position: 'absolute' }}>
-                        <TouchableOpacity onPress={() =>{
+                        <TouchableOpacity onPress={() => {
                             setTimeout(() => {
                                 props.navigation.goBack()
                             }, 500)

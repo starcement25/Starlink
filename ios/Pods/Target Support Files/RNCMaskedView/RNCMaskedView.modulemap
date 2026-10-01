@@ -1,4 +1,4 @@
-framework module RNCMaskedView {
+module RNCMaskedView {
   umbrella header "RNCMaskedView-umbrella.h"
 
   export *

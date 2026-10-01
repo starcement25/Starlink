@@ -1,6 +1,6 @@
 export default
     {
-        base_url: 'https://starlinkinfluencers.in/api/v1', // Live server url
+        base_url: 'https://starlinkinfluencers.in/api/v1', // Live server url.    https://starlinkinfluencers.in/api/v1/view-banner
          //base_url:'https://dev.starlinkinfluencers.in/api/v1', // Dev server url    // https://starlinkinfluencers.in/api/v1/get-order-by-mason
          // Dev server url    // https://starlinkinfluencers.in/api/v1/get-order-by-mason
 
@@ -10,7 +10,7 @@ export default
         language_change: 'update-user-preferences',
         register: 'auth/register',
         send_otp: 'auth/send-otp',
-        my_profile: 'user-profile',
+        my_profile: '/user-profile',
         get_branches: 'get-branchies',
         get_dealer_rssd: 'get-branch-dealer-rssd',
         send_otp_to_new_number: 'auth/send-otp-to-new-number',
@@ -34,7 +34,7 @@ export default
         //terms_and_conditions: 'terms-and-conditions',
         get_faq: 'get-faq',
         get_contact: 'get-contact',
-        get_social_link: 'get-social-link',
+        get_social_link: '/get-social-link',
         get_gift_catalog: 'get-gift-catalog',
         get_gift_catalogues:'get-gift-catalogues',
         get_gifts_by_catalogue:'get-gifts-by-catalogue/',
@@ -44,7 +44,7 @@ export default
         get_rewards_by_mason: 'get-rewards-by-mason',
         get_redeemtion_by_mason: 'get-redeemtion-by-mason',
         get_all_dealers: 'get-all-dealers',
-        view_banner: 'view-banner',
+        view_banner: '/view-banner',
         getOrder: 'get-order-by-mason',
         confirmOrder: 'confirm-gift-delivery/',
         getSupport: 'get-support',
@@ -71,7 +71,7 @@ export default
         link_dealer:'dealer-linking-request',
         accept_linking:'te/accept/dealer-linking_requests',
         reject_linking:'te/reject/dealer-linking_requests',
-        flash_banner:'get-flash-banner',
+        flash_banner:'/get-flash-banner',
         terms_and_conditions: '/settings',
         submit_order_feedback: '/submit-order-feedback',
         check_user_last_order_acknowledgement: '/check-user-last-order-acknowledgement',

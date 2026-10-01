@@ -1,4 +1,4 @@
-framework module RNCClipboard {
+module RNCClipboard {
   umbrella header "RNCClipboard-umbrella.h"
 
   export *

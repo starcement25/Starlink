@@ -1,4 +1,4 @@
-framework module RNDeviceInfo {
+module RNDeviceInfo {
   umbrella header "RNDeviceInfo-umbrella.h"
 
   export *

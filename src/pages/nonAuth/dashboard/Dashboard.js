@@ -28,7 +28,7 @@ import { useDeleteVisible } from '../../../helper/constants/DeleteVisibleContext
 let imageList = []
 
 const Dashboard = (props) => {
-      const { setDeleteVisible } = useDeleteVisible();
+    const { setDeleteVisible } = useDeleteVisible();
     const textValue = useTextValue()
     const messageList = useMessageList()
     const [isExitPopup, setExitPopup] = useState(false)
@@ -52,6 +52,9 @@ const Dashboard = (props) => {
     const [showDOB, setShowDOB] = useState(false);
     const [showBirthdayPopup, setShowBirthdayPopup] = useState(false);
     const [birthData, setBirthData] = useState()
+    const [bdePopup, setBDEPopup] = useState(false)
+    const [bdeName, setBDEName] = useState('')
+    const [bdeNo, setBDENO] = useState('')
     const checkBirthday = (userBirthday) => {
         if (!userBirthday) return false;
 
@@ -71,7 +74,8 @@ const Dashboard = (props) => {
                 if (response.data.status) {
                     setUserInfo(response.data)
                     getBirthday(response?.data?.data?.id)
-                    //console.log("user----", response?.data)
+                    requestForBDEinfo(response?.data?.data?.id)
+                    console.log("user----", response?.data?.data?.id)
                     setUserInfo((prevState) => ({
                         ...prevState,
                         data: {
@@ -96,7 +100,22 @@ const Dashboard = (props) => {
                 showToast('error', messageList.error, messageList.t4)
             })
     }
+    const requestForBDEinfo = (id) => {
+        const requestOptions = {
+            method: "GET",
+            redirect: "follow"
+        };
 
+        fetch("https://starlinkinfluencers.in/api/v1/get-mason-parent-detail?id=" + id, requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                if (result.process_status == 'YES') {
+                    setBDEName(result?.data[0]?.emp_name)
+                    setBDENO(result?.data[0]?.phone_no)
+                }
+            })
+            .catch((error) => console.error(error));
+    }
     const storeBirthday = async (dob) => {
         //console.log("dobbbb", dob);
 
@@ -187,36 +206,36 @@ const Dashboard = (props) => {
         }
     };
 
-const deleteAccount = async () => {
-  try {
-    const response = await fetch(
-      `${Constants.base_url}${Constants.delete_account_btn}`,
-      {
-        method: "GET",
-      }
-    );
+    const deleteAccount = async () => {
+        try {
+            const response = await fetch(
+                `${Constants.base_url}${Constants.delete_account_btn}`,
+                {
+                    method: "GET",
+                }
+            );
 
-    const data = await response.json();
+            const data = await response.json();
 
-    if (response.ok) {
-      console.log("status:", data?.status);
+            if (response.ok) {
+                console.log("status:", data?.status);
 
-      const isVisible = data?.status === 1;
-        setDeleteVisible(isVisible)
-      await AsyncStorage.setItem(
-        "deleteVisible",
-        JSON.stringify(isVisible)
-      );
+                const isVisible = data?.status === 1;
+                setDeleteVisible(isVisible)
+                await AsyncStorage.setItem(
+                    "deleteVisible",
+                    JSON.stringify(isVisible)
+                );
 
-    } else {
-      console.log("Error:", data);
-      return null;
-    }
-  } catch (error) {
-    console.error("API Error:", error);
-    return null;
-  }
-};
+            } else {
+                console.log("Error:", data);
+                return null;
+            }
+        } catch (error) {
+            console.error("API Error:", error);
+            return null;
+        }
+    };
 
 
     useEffect(() => {
@@ -224,22 +243,8 @@ const deleteAccount = async () => {
         return focusListener
     }, [props.navigation])
 
-    // useEffect(() => {
-    //     //console.log("user_id-", JSON.stringify(props));
-    //     const focusListener = props.navigation.addListener('focus', () => {
-    //         get_social_link()
-    //         _banner_images()
-    //         my_profile()
-    //         //checkAndLogBirthday()
-    //         //console.log("user_id-", props);
-    //     })
-    //     return focusListener
-    // }, [props.navigation])
-
     useEffect(() => {
-        const focusListener = props.navigation.addListener('blur', () => {
-            //backHandler.remove()
-        })
+        const focusListener = props.navigation.addListener('blur', () => { })
         return focusListener
     }, [props.navigation])
 
@@ -255,28 +260,7 @@ const deleteAccount = async () => {
 
     const getToken = async () => {
         const token = await AsyncStorage.getItem('access_token');
-        //console.log("token----------->",JSON.stringify(token))
     }
-
-    // useEffect(() => {
-    //     const backAction = () => {
-    //         setExitPopup(true)
-    //         return true
-    //     }
-    //     backHandler = BackHandler.addEventListener(
-    //         'hardwareBackPress',
-    //         backAction
-    //     )
-    //     props.navigation.addListener('focus', () => {
-    //         setLoading(true)
-    //         my_profile()
-    //         backHandler = BackHandler.addEventListener(
-    //             'hardwareBackPress',
-    //             backAction
-    //         )
-    //     })
-    //     return () => backHandler.remove()
-    // }, [])
 
     useFocusEffect(
         useCallback(() => {
@@ -305,36 +289,6 @@ const deleteAccount = async () => {
             return () => { }
         }, [])
     )
-
-    // const my_profile = () => {
-    //     getApiWithHeader(constants.my_profile + '?preferred_app_lang=' + selectedLanguage())
-    //         .then(response => {
-    //             setLoading(false)
-    //             if (response.data.status) {
-    //                 setUserInfo(response.data)
-    //                 setUserInfo((prevState) => ({
-    //                     ...prevState,
-    //                     data: {
-    //                         ...prevState.data,
-    //                         profile_pic: response.data.data.profile_pic,
-    //                     },
-    //                 }))
-    //                 setProfileUserInfo(response.data.data.profile_pic)
-    //             } else {
-    //                 if (response?.data?.status_code == 401) {
-    //                     showToast('error', messageList.error, response?.data?.message)
-    //                     _logout()
-    //                 } else {
-    //                     showToast('error', messageList.error, response?.data?.msg)
-    //                 }
-    //             }
-    //         })
-    //         .catch(err => {
-    //             setLoading(false)
-    //             _logout()
-    //             showToast('error', messageList.error, messageList.t4)
-    //         })
-    // }
 
     const get_social_link = () => {
         getApiWithHeader(constants.get_social_link + '?preferred_app_lang=' + selectedLanguage())
@@ -379,11 +333,16 @@ const deleteAccount = async () => {
         Linking.openURL(url)
     }
 
-    const _banner_images = () => {
+    const _banner_images = async () => {
+        console.log(constants.view_banner + '?preferred_app_lang=' + selectedLanguage());
+        const token = await AsyncStorage.getItem('access_token')
+        console.log(token);
+
         getApiWithHeader(constants.view_banner + '?preferred_app_lang=' + selectedLanguage())
             .then(response => {
                 var imgs = []
                 var data = response.data.data
+                console.log('banner', response.data);
 
                 if (response.data.status) {
                     for (var i = 0; i < data.length; i++) {
@@ -392,7 +351,10 @@ const deleteAccount = async () => {
                     imageList = imgs
                 }
             })
-            .catch(err => { })
+            .catch(err => {
+                console.log('banner', err);
+
+            })
     }
 
     const getBanner = () => {
@@ -518,6 +480,13 @@ const deleteAccount = async () => {
             throw error;
         }
     };
+    const openBDEPopup = () => {
+        console.log('hi');
+        setBDEPopup(true)
+    }
+    const callToBDE = () => {
+        Linking.openURL(`tel:${bdeNo}`).catch(err => console.log('Dialer error:', err));
+    }
 
 
     const renderFirstUserTandCPopup = () => {
@@ -745,7 +714,7 @@ const deleteAccount = async () => {
                             <Text style={{ fontSize: 16, color: '#000', fontWeight: 600, textAlign: 'center' }}>{textValue.DASHBOARD1}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
-                            //console.log('hello world')
+                            // console.log('hello world')
                             props.navigation.navigate('Gift', { obj: userInfo, user_type: userInfo.data.role == 2 ? 'mason' : 'te' })
                             //backHandler.remove()
                             //setFirstUserTandCPopup(false)
@@ -837,7 +806,12 @@ const deleteAccount = async () => {
                         <TouchableOpacity
                             activeOpacity={0.8}
                             onPress={() => {
-                                props.navigation.navigate('Gift', { obj: userInfo, user_type: userInfo.data.role == 2 ? 'mason' : 'te' })
+                                if (userInfo.data.role == 2) {
+                                    props.navigation.navigate('Gift', { obj: userInfo, user_type: userInfo.data.role == 2 ? 'mason' : 'te' })
+                                } else {
+                                    props.navigation.navigate('Gift', { obj: userInfo, user_type: userInfo.data.role == 2 ? 'mason' : 'te' })
+                                }
+
                                 //  setSecondUserTandCPopup(true)
                                 //./setSecondUserTandCPopup(false)
                                 //backHandler.remove()
@@ -922,7 +896,8 @@ const deleteAccount = async () => {
                     <Image source={ImagePath.Design1} style={{ width: '75%', resizeMode: 'contain', height: 100 }} />
                 </View>
                 <View style={{ width: '100%', height: '100%', position: 'absolute', flexDirection: 'column' }}>
-                    {userInfo?.data ? <Toolbar notification={userInfo.data.unreadNotificationCount} obj={{ title: userInfo?.data?.role_name, icon: 'notification', language: 'show' }} openLanguagePopup={openLanguagePopup} /> :
+                    {userInfo?.data ?
+                        <Toolbar notification={userInfo.data.unreadNotificationCount} obj={{ title: userInfo?.data?.role_name, icon: 'notification', language: userInfo?.data?.role == 2 ? 'show' : 'notshow' }} openLanguagePopup={openLanguagePopup} openBDEPopup={openBDEPopup} /> :
                         <Toolbar obj={{ title: '', icon: 'notification', language: 'notshow' }} />}
                     <View style={styles._upperView}>
                         {userInfo ? <View style={styles._user_option_info_view}>
@@ -1047,15 +1022,30 @@ const deleteAccount = async () => {
                         <Text style={{ fontSize: 14, color: '#555', textAlign: 'center', marginBottom: 20, lineHeight: 20, }} > {ackMsg || 'You have a pending delivery acknowledgement. Please confirm.'} </Text>
 
                         <TouchableOpacity onPress={() => {
-                                setAcknowledgementVisibility(false)
-                                props?.navigation?.navigate('Order')
-                            }}
+                            setAcknowledgementVisibility(false)
+                            props?.navigation?.navigate('Order')
+                        }}
                             style={{ backgroundColor: Colors.red, borderRadius: 5, paddingVertical: 10, paddingHorizontal: 25, }}
                         >
                             <Text style={{ color: '#FFF', fontSize: 15, fontWeight: '600' }}>Okay</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
+            </Modal>
+            <Modal animationType="fade" transparent={true} visible={bdePopup && bdeName != ''} onRequestClose={() => { setBDEPopup(false) }} >
+                <TouchableOpacity onPress={() => { setBDEPopup(false) }} style={{ flex: 1, backgroundColor: '#0009', alignItems: 'center', justifyContent: 'center', }} >
+                    <TouchableOpacity onPress={() => { }} style={{ width: '80%', backgroundColor: '#FFF', borderRadius: 10, paddingVertical: 25, paddingHorizontal: 20, alignItems: 'center', }} >
+                        <Text style={{ fontSize: 18, color: '#000', fontWeight: '600', marginBottom: 10, textAlign: 'center', }} > Your Link BDE </Text>
+
+                        <View style={{ width: '100%', marginBottom: 10, flexDirection: 'row', marginTop: 10 }}>
+                            <Text style={{ fontSize: 14, color: '#555', lineHeight: 20, flex: 1 }} >{bdeName}</Text>
+                            <View style={{ width: 5 }} />
+                            <TouchableOpacity onPress={() => { callToBDE() }}>
+                                <Text style={{ fontSize: 14, color: '#284cfeff', lineHeight: 20, textDecorationLine: 'underline', textDecorationColor: '#284cfeff' }} >+91-{bdeNo}</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </TouchableOpacity>
+                </TouchableOpacity>
             </Modal>
             <BirthdayPopup visible={showBirthdayPopup}
                 userName={userInfo?.data?.name}

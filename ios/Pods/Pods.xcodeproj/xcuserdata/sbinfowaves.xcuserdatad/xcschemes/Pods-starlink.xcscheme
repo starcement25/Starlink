@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "39D4E847E618A88BDC891B879F9E532E"
-               BuildableName = "Pods_starlink.framework"
+               BuildableName = "libPods-starlink.a"
                BlueprintName = "Pods-starlink"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
