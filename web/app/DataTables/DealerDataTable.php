@@ -33,6 +33,9 @@ class DealerDataTable extends DataTable
         ->editColumn('dealer_linked.emp_code', function (User $user) {
             return $user->dealer_linked->emp_code ?? "" ;
         })
+        ->editColumn('dealer_linked.sap_code', function (User $user) {
+            return $user->dealer_linked->sap_code ?? "" ;
+        })
         ->editColumn('roles.role_name', function (User $user) {
             return $user->roles->role_name ?? "";
         })
@@ -122,6 +125,7 @@ class DealerDataTable extends DataTable
             Column::make('name'),
             Column::make('roles.role_name')->title('Type'),
             Column::make('dealer_linked.emp_code')->title('Linked Dealer Code'),
+            Column::make('dealer_linked.sap_code')->title('Linked Dealer SAP Code'),
             Column::make('dealer_linked.name')->title('Linked Dealer Name'),
             Column::make('branch.name')->title('Branch'),
             Column::make('phone'),

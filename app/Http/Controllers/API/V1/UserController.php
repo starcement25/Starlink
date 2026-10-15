@@ -1107,11 +1107,12 @@ function getRedeemtionByMason(Request $request)
  {    
     //$x = $this->getLiftingCurrMonthMason(7,139,148);
         //dd($x);
-       
-
+      
+//   dd($request);
         //$datas = AppBanner::where('status', 1)->get();    
          $user = $request->user();
-          $user->branch->zone;
+    //    dd($user->branch);
+          //$user->branch->zone;
        
             // Step 1: Get user's zone via branch
             if (!$user || !$user->branch || !$user->branch->zone) {
@@ -1293,7 +1294,7 @@ function getRedeemtionByMason(Request $request)
             {
                 return response()->json(['status' => false, 'msg' => 'Incorrect Page. Should be started from 1.', 'data' => []], 404);
             }
-            $limit = 6;
+            $limit = 50;
             $fetchDataFrom = $limit * ($page - 1);
             $rewards = DB::table('user_catalogue_redeemtions as UCR')
             ->LeftJoin('users as U','U.id','=','UCR.user_id');

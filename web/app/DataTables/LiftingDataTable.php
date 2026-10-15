@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Lifting;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -40,6 +41,13 @@ class LiftingDataTable extends DataTable
                     //           : '<img src="'.url("default.jpg").'" width="50" height="50">'
                     //       ;
                     // })
+                    ->addColumn('lifting_id', function ($lifting) {
+                        return 'LF0000'.$lifting->id;
+                    })
+                    ->addColumn('created_by', function ($lifting) {
+                        $role = $lifting->req_user->role ?? null;
+                        return $role !== null ? (User::$roles[$role] ?? "") : "";
+                    })
                     ->addColumn('action', function ($lifting) {
                         // if($lifting->reward->point > $lifting->user->points){
 
@@ -84,6 +92,15 @@ class LiftingDataTable extends DataTable
      */
     public function query(Lifting $model): QueryBuilder
     {
+        // Log every executed query (main query + eager-loaded with() queries) to storage/logs/laravel.log
+        // \DB::listen(function ($query) {
+        //     \Log::info('LiftingDataTable query', [
+        //         'sql'      => $query->sql,
+        //         'bindings' => $query->bindings,
+        //         'time_ms'  => $query->time,
+        //     ]);
+        // });
+
         $loggedUser=Auth::user();
         if($loggedUser->id > 6)
         {
@@ -94,6 +111,8 @@ class LiftingDataTable extends DataTable
                 $q->select('id', 'name');
             }])->with(['user'=> function($query){
                 $query->select('id', 'name','emp_code');
+            }])->with(['req_user'=> function($query){
+                $query->select('id', 'name', 'role');
             }])->with(['mason_user','mason_user.user','mason_user.user.branch'])
             ->orderBy('id', 'DESC');
         }
@@ -103,6 +122,8 @@ class LiftingDataTable extends DataTable
                 $q->select('id', 'name');
             }])->with(['user'=> function($query){
                 $query->select('id', 'name','emp_code');
+            }])->with(['req_user'=> function($query){
+                $query->select('id', 'name', 'role');
             }])->with(['mason_user','mason_user.user','mason_user.user.branch'])
             ->orderBy('id', 'DESC');
         }
@@ -186,6 +207,7 @@ class LiftingDataTable extends DataTable
         return [
            
             Column::make('id')->title('id')->visible(false)->searchable(false),
+            Column::computed('lifting_id')->title('Lifting Id'),
             Column::make('lifting_date'),
             Column::make('user.emp_code')->title('Dealer Code'),
             Column::make('user.name')->title('Dealer'),
@@ -194,6 +216,7 @@ class LiftingDataTable extends DataTable
             Column::make('mason_user.user.branch.name')->title('Mason Branch'),
             Column::make('product.name'),
             Column::make('qty'),
+            Column::computed('created_by')->title('Created By'),
             Column::make('remark'),
             // Column::make('image')->searchable(false),
             Column::computed('action')

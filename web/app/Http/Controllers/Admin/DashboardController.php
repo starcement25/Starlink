@@ -19,6 +19,7 @@ class DashboardController extends Controller
     public function dashboard(Request $request, DashboardDataTable $dataTable)
     {
         \Helper::checkIsUserAuthorizeToPerformTheTask('dashboard.view') ;
+        //return "hi";
         $loggedUser=Auth::user();
         $from_date = $request->fromDate === null ? '1990-12-01' : $request->fromDate;
         $fromDataVal = $request->fromDate === null ? '' : $request->fromDate;

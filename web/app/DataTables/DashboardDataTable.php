@@ -42,7 +42,11 @@ class DashboardDataTable extends DataTable
                  $datas = $user->employee_branch->all() ;
                  $temp= [] ;
                  foreach($datas as $data){
-                    $temp[] = $data['zone']['name'];
+                    $zoneName = $data->zone->name ?? null ;
+                    if($zoneName !== null)
+                    {
+                        $temp[] = $zoneName;
+                    }
                  }
               return  implode(",",array_unique($temp));
             })

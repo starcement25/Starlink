@@ -52,6 +52,7 @@ Route::group(['as' => 'debug.'], function() {
 Route::group(['middleware' => ['preventBackHistory', 'auth', 'prevent_dealer']], function() {
     Route::post('/logout', [LoginController::class, 'logout'])->name('admin.logout');
     Route::get('/home', [HomeController::class, 'home'])->name('admin.dashboard');
+       Route::get('/home/pending-orders/export', [HomeController::class, 'exportPendingOrders'])->name('admin.pending-orders.export');
 
     
     //Clean DataBase Records based on client requirement.

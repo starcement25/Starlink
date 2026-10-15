@@ -1,6 +1,14 @@
 @extends('admin.layouts.app')
 
 @section('content')
+<style nonce="{{ $cspNonce }}">
+    .hideit{
+        display: none;
+    }
+    .width-100{
+        width: 100%;
+    }
+</style>
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -27,7 +35,7 @@
                                 <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Please wait....</div>
                             </div>
                         </div>
-                        <div class="mb-3" id="uploadField" style="display: none">
+                        <div class="mb-3 hideit" id="uploadField">
 
                             {!! Form::label('csvFile', 'Csv File', ['class' => 'form-label']) !!}
 
@@ -38,8 +46,8 @@
                         </div>
                     @else
                         <div class="mb-2">
-                            <div id="progress" class="progress" style="display: none;">
-                                <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Please wait....</div>
+                            <div id="progress" class="progress hideit" >
+                                <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated width-100" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Please wait....</div>
                             </div>
                         </div>
                         <div class="mb-3" id="uploadField">
@@ -76,14 +84,14 @@
 </div>
 @endsection
 @push('dealer-bulk-upload-blade')
-    <script>
+    <script nonce="{{ $cspNonce }}">
         var timer ;
         $(document).ready(function(){
           //  getProgress();
             $('#uploadForm').on('submit', function(e){
                 e.preventDefault();
-                $('#uploadField').css({'display':'none'});
-                $('#progress').css({'display':''});
+                $('#uploadField').addClass('hideit');
+                $('#progress').removeClass('hideit');
 
                 formData = new FormData();
                 formData.append("csvFile", $('#csvFile').prop("files")[0]);
@@ -106,16 +114,17 @@
 
                         if(response.success){
                             if(response.import_status){
+                                console.log('import completed');
                                 clearTimeout(timer);
-                                $('#progress').css({'display':'none'}) ;
-                                $('#uploadField').css({'display':''}) ;
+                                $('#progress').addClass('hideit') ;
+                                $('#uploadField').removeClass('hideit') ;
                                 $('#message').html('<div class="alert alert-success">'+response.message+'</div>');
                                 $('#csvFile').val("");
                             }
                         }else{
                             clearTimeout(timer);
-                            $('#progress').css({'display':'none'}) ;
-                            $('#uploadField').css({'display':''}) ;
+                            $('#progress').addClass('hideit') ;
+                            $('#uploadField').removeClass('hideit') ;
                             $('#message').html('<div class="alert alert-danger">'+response.message+'</div>');
                             $('#csvFile').val("");
                         }

@@ -166,6 +166,8 @@ Route::group(['namespace' => 'App\Http\Controllers\API'],function(){
 
         //mason list
         Route::get('/get-mason-list', ['uses' => 'DashboardController@getMasonList']);
+        //mason parent
+         Route::get('/get-mason-parent-detail', ['uses' => 'DashboardController@getMasonParentDetail']);
         // Notification
         Route::get('/get-notifications', ['uses' => 'NotificationController@getNotifications'])->middleware('auth:api', 'account_status');
 

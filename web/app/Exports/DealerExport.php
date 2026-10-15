@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
 class DealerExport implements FromQuery, WithMapping, WithHeadings
-{
+{ 
     /**
     * @return \Illuminate\Support\Collection
     */
@@ -26,6 +26,7 @@ class DealerExport implements FromQuery, WithMapping, WithHeadings
                 'Name',
                 'Type',
                 'Linked Dealer Code',
+                'Linked Dealer SAP Code',
                 'Linked Dealer Name',
                 'Branch',              
                 'Phone',              
@@ -43,6 +44,7 @@ class DealerExport implements FromQuery, WithMapping, WithHeadings
             $user->name ?? "",
             $user->roles->role_name ?? "",
             $user->dealer_linked->emp_code ?? "",
+            $user->dealer_linked->sap_code ?? "",
             $user->dealer_linked->name ?? "",
             $user->branch->name ?? "",
             $user->phone ?? "",

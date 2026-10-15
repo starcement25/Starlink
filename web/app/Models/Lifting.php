@@ -34,6 +34,13 @@ class Lifting extends Model
     }
 
 
+    // Lifting's Created By (Requested By) User
+    public function req_user()
+    {
+        return $this->belongsTo(User::class, 'req_by', 'id');
+    }
+
+
     // Lifting's  Product
     public function product()
     {

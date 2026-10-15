@@ -276,15 +276,40 @@
 @endcan
 
 <!-- Dashboard Menu -->
-@can('dashboard.view')
+<!-- @can('dashboard.view')
     <li class="nav-item menu-is-opening {{ Request::is('*dashboard*') ? 'menu-open' : '' }}">
         <a href="{{route('admin.employee.dashboard')}}" class="nav-link {{ Request::is('*dashboard*') ? 'active' : '' }}">
             <i class="nav-icon fas fa-th"></i>
         <p> Dashboard  </p>
         </a>
     </li>
+@endcan -->
+<!-- Dashboard Menu -->
+@can('dashboard.view')
+    <li class="nav-item menu-is-opening {{ Request::is('*admin/home*', '*admin/dashboard*', '*dashboard*') ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link {{ Request::is('*admin/home*', '*admin/dashboard*', '*dashboard*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+                Dashboard
+                <i class="right fas fa-angle-left"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{{ url('/admin/home') }}" class="nav-link {{ Request::is('*admin/home*') ? 'active' : '' }}">
+                    <i class="far {{ Request::is('*admin/home*') ? 'fa-dot-circle' : 'fa-circle' }} nav-icon"></i>
+                    <p>Operational Dashboard</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('/admin/dashboard') }}" class="nav-link {{ Request::is('*admin/dashboard*') ? 'active' : '' }}">
+                    <i class="far {{ Request::is('*admin/dashboard*') ? 'fa-dot-circle' : 'fa-circle' }} nav-icon"></i>
+                    <p>BDE Dashboard</p>
+                </a>
+            </li>
+        </ul>
+    </li>
 @endcan
-
 <!-- Settings Menu -->
 @can('settings.view')
     <li class="nav-item menu-is-opening {{ Request::is('*settings*') ? 'menu-open' : '' }}">

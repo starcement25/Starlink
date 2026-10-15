@@ -15,11 +15,11 @@
                     <span>&nbsp;</span>
                     <a class="btn btn-primary float-right ml-1"
                         href="{{ route('catalogue.upload.show') }}">
-                        Import
+                        Bulk Upload
                     </a> 
                     <a class="btn btn-primary float-right ml-1"
                        href="{{ route('catalogue.bulk-update.status.show') }}">
-                        Bulk Update
+                        Edit Catelogues(Bulk)
                     </a>
                     <a class="btn btn-primary float-right ml-1"
                        href="{{ route('catalogue.export') }}">

@@ -1247,6 +1247,11 @@ class LiftingController extends Controller
                             else if($val->action_status == 1)
                             {
                                 $user = User::find($val->action_taken_by);
+                                if(!$user)
+                                {
+                                    //dd($val->action_taken_by);
+                                   continue; 
+                                }
                                 $lastModifiedRecord = $val;
                                 if($user->role == 1)
                                 {
@@ -1672,6 +1677,7 @@ class LiftingController extends Controller
         set_time_limit(0);
         $filename = "Lifting_History_".$this->getUniqueId().".csv";
         $headings = [
+            'Lifting Id',
             'Lifting Date',
             'Dealer Code',
             'Dealer',
@@ -1680,6 +1686,7 @@ class LiftingController extends Controller
             'Mason Branch',              
             'Product Name',              
             'Qty',              
+            'Created By',              
             'Remark',
         ];
         
@@ -1694,11 +1701,15 @@ class LiftingController extends Controller
                         $q->select('id', 'name');
                     }])->with(['user'=> function($query){
                         $query->select('id', 'name','emp_code');
+                    }])->with(['req_user'=> function($query){
+                        $query->select('id', 'name', 'role');
                     }])->with(['mason_user','mason_user.user','mason_user.user.branch'])
                     ->orderBy('id', 'DESC')->skip($fetchDataFrom)->take($fetchDataLimit)->get();
             foreach($data as $val)
             {
+                $role = $val->req_user->role ?? null;
                 $content = [
+                    'LF0000'.$val->id,
                     $val->lifting_date ?? "",
                     $val->user->emp_code ?? "",
                     $val->user->name ?? "",
@@ -1707,6 +1718,7 @@ class LiftingController extends Controller
                     $val->mason_user->user->branch->name ?? "",
                     $val->product->name ?? "",
                     $val->qty ?? "",
+                    $role !== null ? (User::$roles[$role] ?? "") : "",
                     $val->remark ?? "",
                 ];
                 fputcsv($myfile,$content);

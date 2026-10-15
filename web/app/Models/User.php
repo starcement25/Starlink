@@ -49,7 +49,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-    public static $roles =   ['' => 'Select Roles', '1'=> 'Technical Engineer', 
+    public static $roles =   ['' => 'Select Roles', '1'=> 'BDE', 
                             '2'=> 'Mason', '3'=> 'Dealer','4'=> 'RSSD', '5'=> 'Admin'];
     public static $adminRole = 5;
     /**

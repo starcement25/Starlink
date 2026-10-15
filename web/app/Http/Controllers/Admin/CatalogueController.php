@@ -283,12 +283,12 @@ class CatalogueController extends Controller
                             $unProcessedCount++ ; 
                             continue;
                         }
-                        elseif(!isset($row[1]) || $row[1] === null || $row[1] === '')
-                        {
-                            array_push($unprocessedData,"<br>Description of row ".($key + 1)." is required");
-                            $unProcessedCount++ ; 
-                            continue;
-                        }
+                        // elseif(!isset($row[1]) || $row[1] === null || $row[1] === '')
+                        // {
+                        //     array_push($unprocessedData,"<br>Description of row ".($key + 1)." is required");
+                        //     $unProcessedCount++ ; 
+                        //     continue;
+                        // }
                         elseif(!isset($row[2]) || $row[2] === null || $row[2] === '')
                         {
                             array_push($unprocessedData,"<br>Point of row ".($key + 1)." is required");
@@ -325,40 +325,40 @@ class CatalogueController extends Controller
                             $unProcessedCount++ ; 
                             continue;
                         }
-                        elseif(!isset($row[5]) || $row[5] === null || $row[5] === '')
-                        {
-                            array_push($unprocessedData,"<br>Image Name of row ".($key + 1)." is required");
-                            $unProcessedCount++ ; 
-                            continue;
-                        }
-                        else
-                        {
-                            $imageName = trim($row[5]);
-                            $imageSourcePath = public_path('catalogues/'.$imageName);
+                        // elseif(!isset($row[5]) || $row[5] === null || $row[5] === '')
+                        // {
+                        //     array_push($unprocessedData,"<br>Image Name of row ".($key + 1)." is required");
+                        //     $unProcessedCount++ ; 
+                        //     continue;
+                        // }
+                        // else
+                        // {
+                        //     $imageName = trim($row[5]);
+                        //     $imageSourcePath = public_path('catalogues/'.$imageName);
 
-                            if (str_contains($imageName, '..') || str_contains($imageName, '/') || str_contains($imageName, '\\')) {
-                                array_push($unprocessedData,"<br>Image Name of row ".($key + 1)." is invalid");
-                                $unProcessedCount++;
-                                continue;
-                            }
+                        //     if (str_contains($imageName, '..') || str_contains($imageName, '/') || str_contains($imageName, '\\')) {
+                        //         array_push($unprocessedData,"<br>Image Name of row ".($key + 1)." is invalid");
+                        //         $unProcessedCount++;
+                        //         continue;
+                        //     }
 
-                            if (!file_exists($imageSourcePath)) {
-                                array_push($unprocessedData,"<br>Image Name of row ".($key + 1)." was not found in catalogues folder");
-                                $unProcessedCount++;
-                                continue;
-                            }
+                        //     if (!file_exists($imageSourcePath)) {
+                        //         array_push($unprocessedData,"<br>Image Name of row ".($key + 1)." was not found in catalogues folder");
+                        //         $unProcessedCount++;
+                        //         continue;
+                        //     }
 
-                            $mimeType = File::mimeType($imageSourcePath);
-                            try {
-                                if (strpos(strtolower($mimeType ?? ''), 'image/') !== 0) {
-                                    throw new \Exception("Not a valid image file");
-                                }
-                            } catch (\Throwable $ex) {
-                                array_push($unprocessedData, "<br>Image Name of row ".($key + 1)." is not a valid image.");
-                                $unProcessedCount++; 
-                                continue;
-                            }
-                        }
+                        //     $mimeType = File::mimeType($imageSourcePath);
+                        //     try {
+                        //         if (strpos(strtolower($mimeType ?? ''), 'image/') !== 0) {
+                        //             throw new \Exception("Not a valid image file");
+                        //         }
+                        //     } catch (\Throwable $ex) {
+                        //         array_push($unprocessedData, "<br>Image Name of row ".($key + 1)." is not a valid image.");
+                        //         $unProcessedCount++; 
+                        //         continue;
+                        //     }
+                        // }
 
                         //After validating 
                         $catalogue = Catalogue::where('name', $row[0])->where("point", $row[2])->first() ;

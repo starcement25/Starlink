@@ -721,4 +721,75 @@ class DashboardController extends Controller
             ]);
         }
     }
+
+    public function getMasonParentDetail(Request $request)
+{
+    try {
+
+        $masonId = $request->query('id');
+
+        if (empty($masonId)) {
+            return response()->json([
+                'process_status' => 'NO',
+                'process_message' => 'Mason id is required',
+                'total_records' => 0,
+                'data' => []
+            ]);
+        }
+
+      
+        $mason = User::where('id', $masonId)
+                    ->where('status', 1)
+                    ->first();
+
+        if (!$mason) {
+            return response()->json([
+                'process_status' => 'NO',
+                'process_message' => 'Mason not found',
+                'total_records' => 0,
+                'data' => []
+            ]);
+        }
+
+      
+        if ($mason->role != 2) {
+            return response()->json([
+                'process_status' => 'NO',
+                'process_message' => 'Provided user is not a Mason',
+                'total_records' => 0,
+                'data' => []
+            ]);
+        }
+
+        
+        $parent = User::select('name as emp_name', 'phone as phone_no', 'email')
+                    ->where('id', $mason->parent)
+                    ->where('status', 1)
+                    ->get();
+
+        if ($parent->isEmpty()) {
+            return response()->json([
+                'process_status' => 'NO',
+                'process_message' => 'Parent not found',
+                'total_records' => 0,
+                'data' => []
+            ]);
+        }
+
+        return response()->json([
+            'process_status' => 'YES',
+            'process_message' => 'Success',
+            'total_records' => $parent->count(),
+            'data' => $parent
+        ]);
+
+    } catch (\Throwable $e) {
+        return response()->json([
+            'process_status' => 'NO',
+            'process_message' => $e->getMessage(),
+            'total_records' => 0,
+            'data' => []
+        ]);
+    }
+}
 }

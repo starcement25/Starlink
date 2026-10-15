@@ -57,7 +57,7 @@
 <!-- Spouse DOB Field -->
 <div class="form-group col-sm-6"  id="spouseDobField">
     {!! Form::label('spouse_dob', 'Spouse Dob:') !!}
-    {!! Form::date('spouse_dob', null, ['class' => ($errors->has('spouse_dob')) ? 'form-control border-danger' : 'form-control','max'=>$mason->spouse_dob ?? ""]) !!}
+    {!! Form::date('spouse_dob', null, ['class' => ($errors->has('spouse_dob')) ? 'form-control border-danger' : 'form-control']) !!}
     @error('spouse_dob')
         <span class="text text-danger">{{ $message }}</span>
     @enderror
